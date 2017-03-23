@@ -10,7 +10,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100000)
 ##  Using MINIAOD. GlobalTag just in case jet re-clustering, L1 trigger filter  etc is needed to be done
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag as customiseGlobalTag
-process.GlobalTag = customiseGlobalTag(process.GlobalTag, globaltag = '80X_dataRun2_Prompt_v14')
+process.GlobalTag = customiseGlobalTag(process.GlobalTag, globaltag = '80X_dataRun2_Prompt_v16')
 ######################################################################
 process.GlobalTag.connect   = 'frontier://FrontierProd/CMS_CONDITIONS'
 process.GlobalTag.pfnPrefix = cms.untracked.string('frontier://FrontierProd/')
@@ -191,20 +191,40 @@ process.MssmHbb     = cms.EDAnalyzer("Ntuplizer",
                                        'hltBTagCaloCSVp014DoubleWithMatching',
                                        'hltDoublePFJetsC100',
                                        'hltDoublePFJetsC100MaxDeta1p6',
-#
+#                                       
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
                                        'hltBTagCaloCSVp026DoubleWithMatching',
                                        'hltDoublePFJetsC160',
 #
                                        'hltL1sDoubleJetC112',
                                        'hltDoubleJetsC112',
+                                       'hltBTagCaloCSVp014DoubleWithMatching',
                                        'hltDoublePFJetsC112',
-                                       'hltDoublePFJetsC112MaxDeta1p6'
+                                       'hltDoublePFJetsC112MaxDeta1p6',
 #
+                                       'hltL1sDoubleJetC112',
+                                       'hltDoubleJetsC112',
+                                       'hltBTagCaloCSVp026DoubleWithMatching',
                                        'hltDoublePFJetsC172',
-#                                       
+#
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
+                                       'hltSingleBTagCSV0p84',
+#
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
                                        'hltSingleBTagCSV0p84',
                                        'hltJetC350',
+#                                       
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
                                        'hltSingleBTagCSV0p78',
+#
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
+                                       'hltSingleBTagCSV0p84',
+                                       'hltJetC350',
 #
                                        'hltL1sZeroBias',
                                        'hltSingleCaloJet10',
@@ -225,15 +245,15 @@ process.MssmHbb     = cms.EDAnalyzer("Ntuplizer",
                                        'hltL1sSingleJet120',
                                        'hltSingleCaloJet170',
                                        'hltSinglePFJet200',
+# belongs to JetHT triggers,
+# added for backward compatibility,
+# particularly on data                                       
+                                       'hltPFJetsCorrectedMatchedToCaloJets10',
+                                       'hltPFJetsCorrectedMatchedToCaloJets40',
+                                       'hltPFJetsCorrectedMatchedToCaloJets50',
+                                       'hltPFJetsCorrectedMatchedToCaloJets110',
+                                       'hltPFJetsCorrectedMatchedToCaloJets170',
                ),
-#    L1ExtraJets     = cms.VInputTag(
-#                cms.InputTag("l1extraParticles","Central","RECO"),
-#                cms.InputTag("l1extraParticles","Forward","RECO"),
-#                cms.InputTag("l1extraParticles","Tau","RECO")
-#                ),
-#    L1ExtraMuons    = cms.VInputTag(
-#                cms.InputTag("l1extraParticles","","RECO")
-#                ),
 )
 
 process.p = cms.Path(
