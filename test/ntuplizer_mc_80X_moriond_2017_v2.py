@@ -160,54 +160,69 @@ process.MssmHbb     = cms.EDAnalyzer("Ntuplizer",
                                        'hltBTagCaloCSVp014DoubleWithMatching',
                                        'hltDoublePFJetsC100',
                                        'hltDoublePFJetsC100MaxDeta1p6',
-#
+#                                       
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
                                        'hltBTagCaloCSVp026DoubleWithMatching',
                                        'hltDoublePFJetsC160',
 #
                                        'hltL1sDoubleJetC112',
                                        'hltDoubleJetsC112',
+                                       'hltBTagCaloCSVp014DoubleWithMatching',
                                        'hltDoublePFJetsC112',
-                                       'hltDoublePFJetsC112MaxDeta1p6'
+                                       'hltDoublePFJetsC112MaxDeta1p6',
 #
+                                       'hltL1sDoubleJetC112',
+                                       'hltDoubleJetsC112',
+                                       'hltBTagCaloCSVp026DoubleWithMatching',
                                        'hltDoublePFJetsC172',
-#                                       
+#
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
+                                       'hltSingleBTagCSV0p84',
+#
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
                                        'hltSingleBTagCSV0p84',
                                        'hltJetC350',
+#                                       
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
                                        'hltSingleBTagCSV0p78',
+#
+                                       'hltL1sDoubleJetC100',
+                                       'hltDoubleJetsC100',
+                                       'hltSingleBTagCSV0p84',
+                                       'hltJetC350',
 #
                                        'hltL1sZeroBias',
                                        'hltSingleCaloJet10',
-                                       'hltPFJetsCorrectedMatchedToCaloJets10',
                                        'hltSinglePFJet40',
 #
                                        'hltL1sSingleJet35',
                                        'hltSingleCaloJet40',
-                                       'hltPFJetsCorrectedMatchedToCaloJets40',
                                        'hltSinglePFJet60',
 #
                                        'hltL1sSingleJet60',
                                        'hltSingleCaloJet50',
-                                       'hltPFJetsCorrectedMatchedToCaloJets50',
                                        'hltSinglePFJet80',
 #
                                        'hltL1sSingleJet90',
                                        'hltSingleCaloJet110',
-                                       'hltPFJetsCorrectedMatchedToCaloJets110',
                                        'hltSinglePFJet140',
 #
                                        'hltL1sSingleJet120',
                                        'hltSingleCaloJet170',
-                                       'hltPFJetsCorrectedMatchedToCaloJets170',
                                        'hltSinglePFJet200',
+# belongs to JetHT triggers,
+# added for backward compatibility,
+# particularly on data                                       
+                                       'hltPFJetsCorrectedMatchedToCaloJets10',
+                                       'hltPFJetsCorrectedMatchedToCaloJets40',
+                                       'hltPFJetsCorrectedMatchedToCaloJets50',
+                                       'hltPFJetsCorrectedMatchedToCaloJets110',
+                                       'hltPFJetsCorrectedMatchedToCaloJets170',
                ),
-#    L1ExtraJets     = cms.VInputTag(
-#                                    cms.InputTag("l1extraParticles","Central","RECO"),
-#                                    cms.InputTag("l1extraParticles","Forward","RECO"),
-#                                    cms.InputTag("l1extraParticles","Tau","RECO")
-#                                    ),
-#    L1ExtraMuons    = cms.VInputTag(
-#                                    cms.InputTag("l1extraParticles","","RECO")
-#                                    ),
 )
 
 process.p = cms.Path(
