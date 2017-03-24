@@ -271,7 +271,7 @@ readFiles = cms.untracked.vstring()
 secFiles = cms.untracked.vstring() 
 process.source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles)
 readFiles.extend( [
-   '/store/data/Run2016H/BTagCSV/MINIAOD/PromptReco-v2/000/283/680/00000/F2B52560-639A-E611-8B8F-02163E014725.root',
+   '/store/data/Run2016H/BTagCSV/MINIAOD/03Feb2017_ver3-v1/100000/3CE99643-70ED-E611-8DF9-FACADE0000AE.root',
 ] );
 
 
