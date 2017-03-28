@@ -7,18 +7,24 @@ from WMCore.Configuration import Configuration
 
 # ---
 # Some parameter steering
-PROCESS         = 'JetHT_ReReco_23Sep2016_Bv3'
+PROCESS         = 'BTagCSV_2016H_03Feb2017'
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
-PSET            = 'ntuplizer_data_80X_rereco_23Sep2016_v1.py'
-CAMPAIGN        = 'Run2016/80x_rereco_23Sep2016_v1'
+PSET            = 'ntuplizer_data_80X_moriond17_H.py'
+CAMPAIGN        = 'Run2016/80x_moriond17_reminiaod_03Feb2017_v1'
 BASEOUTDIR      = '/store/user/rwalsh/Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
-URL             = 'http://www.desy.de/~walsh/cms/analysis/samples/miniaod/Run2016'
 
+# from URL
 # ---
-dataset_list    = URL + '/' + PROCESS + '.txt'
-datasets        = urllib2.urlopen(dataset_list)
+#URL             = 'http://www.desy.de/~walsh/cms/analysis/samples/miniaod/Run2016'
+#dataset_list    = URL + '/' + PROCESS + '.txt'
+#datasets        = urllib2.urlopen(dataset_list)
+
+dataset_list    = 'samples/data/' + PROCESS + '.txt'
+f_datasets = open(dataset_list,'r')
+datasets = f_datasets.readlines()
+
 
 # _________________________________________________________________________
 
@@ -28,7 +34,7 @@ if __name__ == '__main__':
    from CRABClient.ClientExceptions import ClientException
    from httplib import HTTPException
     
-   from Analysis.Tools.crabConfig import crabConfig
+   from Analysis.Ntuplizer.crabConfig import crabConfig
    config = crabConfig()
 
 # ====== GENERAL

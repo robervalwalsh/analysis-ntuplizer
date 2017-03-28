@@ -279,7 +279,7 @@ readFiles = cms.untracked.vstring()
 secFiles = cms.untracked.vstring() 
 process.source = cms.Source ("PoolSource",fileNames = readFiles, secondaryFileNames = secFiles)
 readFiles.extend( [
-   '/store/data/Run2016G/BTagCSV/MINIAOD/23Sep2016-v1/100000/A0FD8C4F-AE8F-E611-8E4E-0242AC130005.root',
+   '/store/data/Run2016G/BTagCSV/MINIAOD/03Feb2017-v1/100000/00609568-EAEC-E611-99AF-002590DE6E36.root',
 ] );
 
 

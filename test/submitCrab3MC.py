@@ -13,14 +13,19 @@ from WMCore.Configuration import Configuration
 PROCESS         = 'TTbar'
 UNITS_PER_JOB   = 2
 TYPE            = 'MC'
-PSET            = 'ntuplizer_mc_80X_moriond_2017_v1.py'
-CAMPAIGN        = 'Moriond17/80x_moriond_2017_tranchiv_v1'
+PSET            = 'ntuplizer_mc_80X_moriond17.py'
+CAMPAIGN        = 'Moriond17/80x_moriond17_data03Feb2017_v1'
 BASEOUTDIR      = '/store/user/rwalsh/Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
-URL             = 'http://www.desy.de/~walsh/cms/analysis/samples/miniaodsim/Moriond17'
 
+# from URL
 # ---
-dataset_list    = URL + '/' + PROCESS + '.txt'
-datasets        = urllib2.urlopen(dataset_list)
+#URL             = 'http://www.desy.de/~walsh/cms/analysis/samples/miniaodsim/Moriond17'
+#dataset_list    = URL + '/' + PROCESS + '.txt'
+#datasets        = urllib2.urlopen(dataset_list)
+
+dataset_list    = 'samples/mc/' + PROCESS + '.txt'
+f_datasets = open(dataset_list,'r')
+datasets = f_datasets.readlines()
 
 import FWCore.ParameterSet.Config as cms
 #from ntuplizer_mc_765_summer_conferences_2016_v1 import process
@@ -35,11 +40,11 @@ if __name__ == '__main__':
    from CRABClient.ClientExceptions import ClientException
    from httplib import HTTPException
     
-   from Analysis.Tools.crabConfig import crabConfig
+   from Analysis.Ntuplizer.crabConfig import crabConfig
    config = crabConfig()
 
 # ====== GENERAL
-   config.General.workArea += '_' + PROCESS
+#   config.General.workArea += '_' + PROCESS
    
 # ====== DATA   
    config.Data.splitting   = 'FileBased'
@@ -60,9 +65,13 @@ if __name__ == '__main__':
          dataset = dataset.split(',')[0]
       else:
          dataset = dataset.split('\n')[0]
+         
       dataset_name = dataset.split('/')[1]
       dataset_cond = dataset.split('/')[2]
       dataset_tier = dataset.split('/')[3]
+       
+       
+      
 #      
       config.Data.inputDataset     = dataset
       config.Data.outputDatasetTag = dataset_cond
