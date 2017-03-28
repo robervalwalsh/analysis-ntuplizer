@@ -44,7 +44,7 @@ if __name__ == '__main__':
    config = crabConfig()
 
 # ====== GENERAL
-#   config.General.workArea += '_' + PROCESS
+   config.General.workArea += '_' + PROCESS
    
 # ====== DATA   
    config.Data.splitting   = 'FileBased'
