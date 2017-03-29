@@ -13,7 +13,8 @@ UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
 PSET            = 'ntuplizer_data_80X_moriond17_H.py'
 CAMPAIGN        = 'Run2016/80x_moriond17_reminiaod_03Feb2017_v1'
-BASEOUTDIR      = '/store/user/rwalsh/Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
+MYPATH          = '/store/user/%s/' % (getUsernameFromSiteDB())
+BASEOUTDIR      = MYPATH+'Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
 
 # from URL
 # ---
