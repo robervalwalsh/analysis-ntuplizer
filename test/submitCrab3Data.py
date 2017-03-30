@@ -2,8 +2,10 @@
 
 import os.path
 import urllib2
+import sys
 
 from WMCore.Configuration import Configuration
+from CRABClient.UserUtilities import getUsernameFromSiteDB
 
 # ---
 # Some parameter steering
@@ -75,6 +77,6 @@ if __name__ == '__main__':
       
       print config.General.requestName
 #      
-      crabCommand('submit', config = config)
+#      crabCommand('submit', config = config)
 
 # _________________________________________________________________________

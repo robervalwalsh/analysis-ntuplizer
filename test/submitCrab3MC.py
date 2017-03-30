@@ -6,7 +6,7 @@ import urllib2
 import importlib
 
 from WMCore.Configuration import Configuration
-
+from CRABClient.UserUtilities import getUsernameFromSiteDB
 
 # ---
 # Some parameter steering
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 #      
       config.JobType.psetName    = psettmp
 #
-      crabCommand('submit', config = config)
+#      crabCommand('submit', config = config)
 #
       os.remove(psettmp)
 
