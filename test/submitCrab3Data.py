@@ -3,31 +3,61 @@
 import os.path
 import urllib2
 import sys
-
 from WMCore.Configuration import Configuration
 from CRABClient.UserUtilities import getUsernameFromSiteDB
 
+# colors
+W  = '\033[0m'  # white (normal)
+R  = '\033[31m' # red
+G  = '\033[32m' # green
+O  = '\033[33m' # orange
+B  = '\033[34m' # blue
+P  = '\033[35m' # purple
+
+
+ARGSN = len(sys.argv)
+if ARGSN < 3:
+   print (R+"You need to provide the CMSSW python config and the samples file in this order"+W)
+   sys.exit()
+
 # ---
 # Some parameter steering
-PROCESS         = 'BTagCSV_2016H_03Feb2017'
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
-PSET            = 'ntuplizer_data_80X_moriond17_H.py'
 CAMPAIGN        = 'Run2016/80x_moriond17_reminiaod_03Feb2017_v1'
+
+ARGS = sys.argv
+PSET = ARGS[1]
+SAMPLE = ARGS[2]
+
+psetname, pset_ext = os.path.splitext(PSET)
+samplename, sample_ext = os.path.splitext(SAMPLE)
+
+if not ( os.path.isfile(PSET) and pset_ext == '.py' ):
+   print (R+"The given python config does not exist or it is not a python file"+W)
+   sys.exit()
+
+if not ( os.path.isfile(SAMPLE) and sample_ext == '.txt' ):
+   print (R+"The given sample list file does not exist or it is not a txt file"+W)
+   sys.exit()
+
+# Some parameter steering
+PROCESS         = samplename.split('/')[-1]
 MYPATH          = '/store/user/%s/' % (getUsernameFromSiteDB())
 BASEOUTDIR      = MYPATH+'Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
-
-# from URL
-# ---
-#URL             = 'http://www.desy.de/~walsh/cms/analysis/samples/miniaod/Run2016'
-#dataset_list    = URL + '/' + PROCESS + '.txt'
-#datasets        = urllib2.urlopen(dataset_list)
 
 dataset_list    = 'samples/data/' + PROCESS + '.txt'
 f_datasets = open(dataset_list,'r')
 datasets = f_datasets.readlines()
 
+# colors
+W  = '\033[0m'  # white (normal)
+R  = '\033[31m' # red
+G  = '\033[32m' # green
+O  = '\033[33m' # orange
+B  = '\033[34m' # blue
+P  = '\033[35m' # purple
 
 # _________________________________________________________________________
 
@@ -75,8 +105,11 @@ if __name__ == '__main__':
       if RUN_RANGE != '':
          config.General.requestName += '_'+RUN_RANGE
       
-      print config.General.requestName
+      outtext = "Submitting dataset " + dataset + "..."
+      print (O+str(outtext)+W) 
 #      
-      crabCommand('submit', config = config)
+#      crabCommand('submit', config = config)
+      print (O+"--------------------------------"+W)
+      print
 
 # _________________________________________________________________________
