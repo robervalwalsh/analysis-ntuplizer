@@ -2,8 +2,10 @@
 
 import os.path
 import urllib2
+import sys
 
 from WMCore.Configuration import Configuration
+from CRABClient.UserUtilities import getUsernameFromSiteDB
 
 # ---
 # Some parameter steering

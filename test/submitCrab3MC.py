@@ -6,7 +6,7 @@ import urllib2
 import importlib
 
 from WMCore.Configuration import Configuration
-
+from CRABClient.UserUtilities import getUsernameFromSiteDB
 
 # ---
 # Some parameter steering
