@@ -77,6 +77,6 @@ if __name__ == '__main__':
       
       print config.General.requestName
 #      
-#      crabCommand('submit', config = config)
+      crabCommand('submit', config = config)
 
 # _________________________________________________________________________

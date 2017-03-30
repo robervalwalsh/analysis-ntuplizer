@@ -91,7 +91,7 @@ if __name__ == '__main__':
 #      
       config.JobType.psetName    = psettmp
 #
-#      crabCommand('submit', config = config)
+      crabCommand('submit', config = config)
 #
       os.remove(psettmp)
 
