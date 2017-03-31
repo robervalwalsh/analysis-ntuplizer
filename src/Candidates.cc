@@ -219,8 +219,6 @@ template <typename T>
 void Candidates<T>::Kinematics()
 {
    using namespace edm;
-
-   
    
    int n = 0;
    for ( size_t i = 0 ; i < candidates_.size(); ++i )
@@ -271,13 +269,6 @@ void Candidates<T>::Kinematics()
          for ( size_t it = 0 ; it < btag_vars_.size() ; ++it )
          {
             btag_[it][n] = jet->bDiscriminator(btag_vars_[it].title);
-//             if ( btag_vars_[it].title == "deepFlavourJetTags:probudsg" ) 
-//             {
-//                std::cout << btag_vars_[it].title << "   prob = " << btag_[it][n] << std::endl;
-//             }
-//            btag_[it][n] = jet->bDiscriminator(btag_vars_[it].title);
-//            if ( btag_vars_[it].title == "deepFlavourCMVAJetTags:probb" )
-//                std::cout << "deepFlavourCMVAJetTags:probb = " << btag_[it][n] << std::endl;
          }
          
          if ( jet -> isPFJet() || jet -> isJPTJet() ) 
@@ -391,6 +382,7 @@ void Candidates<T>::Kinematics()
       
       ++n;
    }
+   
    n_ = n;
 
 }
