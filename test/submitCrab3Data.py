@@ -108,7 +108,7 @@ if __name__ == '__main__':
       outtext = "Submitting dataset " + dataset + "..."
       print (O+str(outtext)+W) 
 #      
-#      crabCommand('submit', config = config)
+      crabCommand('submit', config = config)
       print (O+"--------------------------------"+W)
       print
 
