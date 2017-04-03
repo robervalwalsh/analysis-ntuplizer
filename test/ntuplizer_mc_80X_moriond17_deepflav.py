@@ -65,7 +65,7 @@ updateJetCollection(
     process,
     labelName = 'Puppi',
     jetSource = cms.InputTag('slimmedJetsPuppi'),
-    jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+    jetCorrections = ('AK4PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
     btagDiscriminators = bTagDiscriminators
 )
 
