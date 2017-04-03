@@ -13,7 +13,7 @@
 
 // system include files
 // 
-
+#include <regex>
 #include <boost/core/demangle.hpp>
 
 // user include files
@@ -219,7 +219,7 @@ template <typename T>
 void Candidates<T>::Kinematics()
 {
    using namespace edm;
-
+   
    int n = 0;
    for ( size_t i = 0 ; i < candidates_.size(); ++i )
    {
@@ -267,7 +267,9 @@ void Candidates<T>::Kinematics()
 //         std::cout << "oioi   " << svTI << std::endl;
          
          for ( size_t it = 0 ; it < btag_vars_.size() ; ++it )
+         {
             btag_[it][n] = jet->bDiscriminator(btag_vars_[it].title);
+         }
          
          if ( jet -> isPFJet() || jet -> isJPTJet() ) 
          {
@@ -380,6 +382,7 @@ void Candidates<T>::Kinematics()
       
       ++n;
    }
+   
    n_ = n;
 
 }
@@ -526,7 +529,16 @@ void Candidates<T>::Branches()
       if ( is_patjet_ )
       {
          for ( size_t it = 0 ; it < btag_vars_.size() ; ++it )
-            tree_->Branch(btag_vars_[it].alias.c_str(), btag_[it], (btag_vars_[it].title+"[n]/F").c_str());
+         {
+            std::string title = btag_vars_[it].title;
+            if (title.find(":") != std::string::npos)
+            {
+               title = std::regex_replace(title, std::regex("\\:"), "_");
+            }
+            tree_->Branch(btag_vars_[it].alias.c_str(), btag_[it], (title+"[n]/F").c_str());
+//            tree_->Branch(btag_vars_[it].alias.c_str(), btag_[it], (btag_vars_[it].title+"[n]/F").c_str());
+//            std::cout << btag_vars_[it].alias.c_str() << "   " << title.c_str() << std::endl;
+         }
             
          tree_->Branch("flavour",        flavour_,         "flavour[n]/I");
          tree_->Branch("hadronFlavour",  hadronFlavour_,   "hadronFlavour[n]/I" );
