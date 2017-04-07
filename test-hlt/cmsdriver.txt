@@ -2,7 +2,7 @@
 ======
 
 cmsDriver.py step2 \
---step=L1REPACK:Full,HLT:User \
+--step=L1REPACK:Full,HLT:UserBTagMu20 \
 --conditions=auto:run2_hlt_GRun \
 --filein=/store/data/Run2016H/BTagMu/RAW/v1/000/283/408/00000/78879B75-CC94-E611-BAE6-02163E0146EA.root \
 --custom_conditions= \
@@ -15,7 +15,7 @@ cmsDriver.py step2 \
 --era=Run2_2016 \
 --customise= \
 --scenario=pp \
---python_filename=ReHLT_L1Trepack_HLTUser_Ntuple.py \
+--python_filename=ReHLT_L1Trepack_HLTUserBtagMu20_Ntuple.py \
 --processName=HLT2 \
 --no_output
 
