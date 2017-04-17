@@ -60,8 +60,9 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 # Trigger filter
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
 process.triggerFilter = triggerFilter
+process.triggerFilter.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
 process.triggerFilter.triggerConditions  = cms.vstring  (
-                                  'HLT_BTagMu_DiJet20_Mu5_v*',
+                                  'HLT_BTagMu_DiJet20_Mu5_DoubleBTagCSV_p000_DoublePFJet20_v*',
                                   )
 
 # Ntuplizer

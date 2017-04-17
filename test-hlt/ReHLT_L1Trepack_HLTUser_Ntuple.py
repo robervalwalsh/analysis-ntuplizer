@@ -27,7 +27,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('/store/data/Run2016H/ParkingZeroBias0/RAW/v1/000/283/885/00000/5453166E-DA9D-E611-A050-FA163EEEB45D.root'),
+    fileNames = cms.untracked.vstring('/store/data/Run2016H/ZeroBiasBunchTrains0/RAW/v1/000/283/171/00000/00B47F48-3192-E611-A382-FA163E605F68.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -61,7 +61,7 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
 process.triggerFilter = triggerFilter
 process.triggerFilter.triggerConditions  = cms.vstring  (
-                                  'HLT_ZeroBias_part0_v*',
+                                  'HLT_ZeroBias_BunchTrains_part*',
                                   )
 
 # Ntuplizer
