@@ -1,0 +1,43 @@
+ DATA
+======
+
+cmsDriver.py step2 \
+--step=L1REPACK:Full,HLT:UserBTagMu20 \
+--conditions=auto:run2_hlt_GRun \
+--filein=/store/data/Run2016H/BTagMu/RAW/v1/000/283/408/00000/78879B75-CC94-E611-BAE6-02163E0146EA.root \
+--custom_conditions= \
+--number=10 \
+--data \
+--no_exec \
+--datatier RAW\
+--eventcontent=RAW\
+--customise=HLTrigger/Configuration/CustomConfigs.L1THLT \
+--era=Run2_2016 \
+--customise= \
+--scenario=pp \
+--python_filename=ReHLT_L1Trepack_HLTUserBtagMu20_Ntuple.py \
+--processName=HLT2 \
+--no_output
+
+
+ MC
+====
+
+cmsDriver.py step2 \
+--step=L1REPACK:FullMC,HLT:UserMC \
+--conditions=auto:run2_mc_GRun \
+--filein=/store/mc/RunIISummer16DR80/QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/021D009D-21A3-E611-B83B-0025905A6080.root \
+--secondfilein= \
+--custom_conditions= \
+--number=100 \
+--mc\
+--no_exec \
+--datatier RAW\
+--eventcontent=RAW\
+--customise=HLTrigger/Configuration/CustomConfigs.L1THLT \
+--era=Run2_2016 \
+--customise= \
+--scenario=pp \
+--python_filename=ReHLT_L1Trepack_HLTUserMC_Ntuple.py \
+--processName=HLT2 \
+--no_output

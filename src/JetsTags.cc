@@ -23,6 +23,7 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
 #include "CommonTools/Utils/interface/PtComparator.h"
+#include "DataFormats/Common/interface/AssociationVector.h"
 
 #include "Analysis/Ntuplizer/interface/JetsTags.h"
 
@@ -89,7 +90,8 @@ void JetsTags::ReadFromEvent(const edm::Event& event)
    
    // Particles
 //   edm::Handle<std::vector<reco::JetTag> > handler;
-   edm::Handle<reco::JetTagCollection> handler;
+//   edm::Handle<reco::JetTagCollection> handler;
+   edm::Handle<edm::AssociationVector<edm::RefToBaseProd<reco::Jet>,std::vector<float>,edm::RefToBase<reco::Jet>,unsigned int,edm::helper::AssociationIdenticalKeyReference> > handler;
    event.getByLabel(this->input_collection_, handler);
 //   event.getByLabel(InputTag(modLabel,instanceName,processName), handler);
    candidates_ = *(handler.product());
@@ -104,8 +106,8 @@ void JetsTags::Tags()
    {
       if ( n >= maxCandidates ) break;
       
-      RefToBase<reco::Jet> jet = candidates_[i].first;
-      float btag = candidates_[i].second;
+      const reco::Jet * jet = candidates_.key(i).get();
+      float btag = candidates_.value(i);
       
       if ( jet -> pt() < minPt_ || fabs (jet -> eta()) > maxEta_ ) continue;
       
