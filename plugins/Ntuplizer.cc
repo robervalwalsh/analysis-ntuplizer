@@ -220,6 +220,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::map<std::string, edm::EDGetTokenT<trigger::TriggerEvent> > triggerEventTokens_;
       std::map<std::string, edm::EDGetTokenT<edm::TriggerResults> > triggerResultsTokens_;
       std::map<std::string, edm::EDGetTokenT<reco::VertexCollection> > primaryVertexTokens_;
+      std::map<std::string, edm::EDGetTokenT<reco::JetTagCollection> > jetTagTokens_;
 
 #ifndef CMSSWOLD
       std::shared_ptr<HLTPrescaleProvider> hltPrescaleProvider_;
@@ -337,6 +338,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config) //:   // initialization of
          if ( inputTags == "TriggerEvent"  ) triggerEventTokens_[collection_name] = consumes<trigger::TriggerEvent>(collection);
          if ( inputTags == "PrimaryVertices"  ) primaryVertexTokens_[collection_name] = consumes<reco::VertexCollection>(collection);
          if ( inputTags == "TriggerResults"  ) triggerResultsTokens_[collection_name] = consumes<edm::TriggerResults>(collection);
+         if ( inputTags == "JetsTags" ) jetTagTokens_[collection_name] = consumes<reco::JetTagCollection>(collection);
      }
    }
    
@@ -734,7 +736,7 @@ Ntuplizer::beginJob()
          // Jets Tags
          if ( inputTags == "JetsTags" )
          {
-            jetstags_collections_.push_back( pJetsTags( new JetsTags(collection, tree_[name]) ));
+            jetstags_collections_.push_back( pJetsTags( new JetsTags(collection, tree_[name], 0., 10.) ));
             jetstags_collections_.back() -> Branches();
          }
    
