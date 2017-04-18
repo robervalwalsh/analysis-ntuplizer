@@ -52,6 +52,9 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
+#include "DataFormats/L1Trigger/interface/Jet.h"
+#include "DataFormats/L1Trigger/interface/Muon.h"
+
 #include "DataFormats/PatCandidates/interface/TriggerObject.h"
 
 #include "DataFormats/JetReco/interface/GenJet.h"
@@ -122,6 +125,8 @@ typedef analysis::ntuple::Candidates<trigger::TriggerObject> TriggerObjectRecoCa
 typedef analysis::ntuple::JetsTags JetsTags;
 typedef analysis::ntuple::TriggerAccepts TriggerAccepts;
 typedef analysis::ntuple::Vertices PrimaryVertices;
+typedef analysis::ntuple::Candidates<l1t::Jet> L1TJetCandidates;
+typedef analysis::ntuple::Candidates<l1t::Muon> L1TMuonCandidates;
 
 
 // Alias to the pointers to the above classes
@@ -143,6 +148,8 @@ typedef std::unique_ptr<TriggerObjectRecoCandidates> pTriggerObjectRecoCandidate
 typedef std::unique_ptr<JetsTags> pJetsTags;
 typedef std::unique_ptr<TriggerAccepts> pTriggerAccepts;
 typedef std::unique_ptr<PrimaryVertices> pPrimaryVertices;
+typedef std::unique_ptr<L1TJetCandidates> pL1TJetCandidates;
+typedef std::unique_ptr<L1TMuonCandidates> pL1TMuonCandidates;
 
 //
 // class declaration
@@ -193,6 +200,8 @@ class Ntuplizer : public edm::EDAnalyzer {
       bool do_triggerobjects_;
       bool do_genruninfo_;
       bool do_lumiscalers_;
+      bool do_l1tjets_;
+      bool do_l1tmuons_;
       
       bool readprescale_;
       
@@ -221,6 +230,8 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::map<std::string, edm::EDGetTokenT<edm::TriggerResults> > triggerResultsTokens_;
       std::map<std::string, edm::EDGetTokenT<reco::VertexCollection> > primaryVertexTokens_;
       std::map<std::string, edm::EDGetTokenT<reco::JetTagCollection> > jetTagTokens_;
+      std::map<std::string, edm::EDGetTokenT<l1t::JetBxCollection> > l1tJetTokens_;
+      std::map<std::string, edm::EDGetTokenT<l1t::MuonBxCollection> > l1tMuonTokens_;
 
 #ifndef CMSSWOLD
       std::shared_ptr<HLTPrescaleProvider> hltPrescaleProvider_;
@@ -276,6 +287,8 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::vector<pTriggerAccepts> triggeraccepts_collections_;
       std::vector<pTriggerObjectCandidates> triggerobjects_collections_;
       std::vector<pTriggerObjectRecoCandidates> triggerobjectsreco_collections_;
+      std::vector<pL1TJetCandidates> l1tjets_collections_;
+      std::vector<pL1TMuonCandidates> l1tmuons_collections_;
       
       
       
@@ -339,6 +352,8 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config) //:   // initialization of
          if ( inputTags == "PrimaryVertices"  ) primaryVertexTokens_[collection_name] = consumes<reco::VertexCollection>(collection);
          if ( inputTags == "TriggerResults"  ) triggerResultsTokens_[collection_name] = consumes<edm::TriggerResults>(collection);
          if ( inputTags == "JetsTags" ) jetTagTokens_[collection_name] = consumes<reco::JetTagCollection>(collection);
+         if ( inputTags == "L1TJets" ) l1tJetTokens_[collection_name] = consumes<l1t::JetBxCollection>(collection);
+         if ( inputTags == "L1TMuons" ) l1tMuonTokens_[collection_name] = consumes<l1t::MuonBxCollection>(collection);
      }
    }
    
@@ -463,6 +478,14 @@ void Ntuplizer::analyze(const edm::Event& event, const edm::EventSetup& setup)
       for ( auto & collection : triggerobjectsreco_collections_ )
          collection -> Fill(event);
       
+      // L1T jets
+      for ( auto & collection : l1tjets_collections_ )
+         collection -> Fill(event);
+      // L1T muons
+      for ( auto & collection : l1tmuons_collections_ )
+         collection -> Fill(event);
+      
+      
 }
 
 
@@ -491,6 +514,8 @@ Ntuplizer::beginJob()
    do_genfilter_        = config_.exists("GenFilterInfo");
    do_triggerobjects_   = ( config_.exists("TriggerObjectStandAlone") || config_.exists("TriggerEvent") ) &&  config_.exists("TriggerObjectLabels");
    do_genruninfo_       = config_.exists("GenRunInfo") && is_mc_ ;
+   do_l1tjets_          = config_.exists("L1TJets");
+   do_l1tmuons_         = config_.exists("L1TMuons");
    
    if ( config_.exists("TestMode") ) // This is DANGEROUS! but can be useful. So BE CAREFUL!!!!
       testmode_ = config_.getParameter<bool> ("TestMode");
@@ -634,7 +659,9 @@ Ntuplizer::beginJob()
          if ( collection.instance() != "" && collections.size() > 1 )
             name += "_" + inst;
          if ( use_full_name_ ) name = fullname;
-         
+         if ( inputTags == "L1TJets"  && l1tjets_collections_.size() == 0 )  name = "l1tJets";
+         if ( inputTags == "L1TMuons" && l1tmuons_collections_.size() == 0 )  name = "l1tMuons";
+
          // Initialise trees
          if ( inputTags != "TriggerObjectStandAlone" && inputTags != "TriggerEvent"  )
             tree_[name] = eventsDir.make<TTree>(name.c_str(),fullname.c_str());
@@ -740,7 +767,34 @@ Ntuplizer::beginJob()
             jetstags_collections_.back() -> Branches();
          }
    
+         // L1T Jets
+         if ( inputTags == "L1TJets" )
+         {
+            if ( l1tjets_collections_.size() == 0 )
+            {
+               l1tjets_collections_.push_back( pL1TJetCandidates( new L1TJetCandidates(collection, tree_[name], is_mc_ ) ));
+               l1tjets_collections_.back() -> Init();
+            }
+            else
+            {
+               std::cout << "Ntuplizer: # l1 jet collections > 1. Skipping." << std::endl;
+            }
+         }
 
+         // L1T Muon
+         if ( inputTags == "L1TMuons" )
+         {
+            if ( l1tmuons_collections_.size() == 0 )
+            {
+               l1tmuons_collections_.push_back( pL1TMuonCandidates( new L1TMuonCandidates(collection, tree_[name], is_mc_ ) ));
+               l1tmuons_collections_.back() -> Init();
+            }
+            else
+            {
+               std::cout << "Ntuplizer: # l1 muon collections > 1. Skipping." << std::endl;
+            }
+         }
+         
          // Trigger Objects
          if ( do_triggerobjects_ && inputTags == "TriggerObjectStandAlone"  )
          {

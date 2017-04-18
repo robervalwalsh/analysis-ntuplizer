@@ -5,8 +5,10 @@ ntuplizer           = cms.EDAnalyzer("Ntuplizer",
     MonteCarlo      = cms.bool(False),
     UseFullName     = cms.bool(False),
     ###################
-    JetsTags        = cms.VInputTag(cms.InputTag("hltCombinedSecondaryVertexBJetTagsCalo")),
-    TriggerResults  = cms.VInputTag(cms.InputTag("TriggerResults","","HLT2")),
+    JetsTags        = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo')),
+    L1TJets         = cms.VInputTag(cms.InputTag('hltCaloStage2Digis','Jet')),
+    L1TMuons        = cms.VInputTag(cms.InputTag('hltGmtStage2Digis','Muon')),
+    TriggerResults  = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2')),
     TriggerPaths    = cms.vstring  (
                                   'HLT_ZeroBias_v',
                                   'HLT_L1SingleJet20_v',

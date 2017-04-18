@@ -154,6 +154,8 @@ namespace analysis {
             bool is_mc_;
             bool do_kinematics_;
             bool do_generator_;
+            bool is_l1tjet_;
+            bool is_l1tmuon_;
             
             float minPt_;
             float maxEta_;
