@@ -22,7 +22,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(100)
 )
 
 # Input source
@@ -59,9 +59,9 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 
 # Trigger filter
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
-process.triggerFilter = triggerFilter
-process.triggerFilter.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
-process.triggerFilter.triggerConditions  = cms.vstring  (
+process.triggerFilter2 = triggerFilter
+process.triggerFilter2.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
+process.triggerFilter2.triggerConditions  = cms.vstring  (
                                   'HLT_BTagMu_DiJet20_Mu5_DoubleBTagCSV_p000_DoublePFJet20_v*',
                                   'HLT_BTagMu_DiJet20_Mu5_DoubleBTagCSV_p014_DoublePFJet20_v*',
                                   'HLT_DoubleJetsC100_DoubleBTagCSV_p000_DoublePFJetsC100MaxDeta1p6_v*',
@@ -75,7 +75,7 @@ process.TFileService = TFileService
 from Analysis.Ntuplizer.NtuplizerData80X_cfi import ntuplizer
 process.MssmHbbTrigger = ntuplizer
 
-process.Ntuplizer = cms.Sequence(process.triggerFilter + process.MssmHbbTrigger)
+process.Ntuplizer = cms.Sequence(process.triggerFilter2 + process.MssmHbbTrigger)
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
 
 
