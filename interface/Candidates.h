@@ -156,6 +156,7 @@ namespace analysis {
             bool do_generator_;
             bool is_l1tjet_;
             bool is_l1tmuon_;
+            bool is_chargedcand_;
             
             float minPt_;
             float maxEta_;

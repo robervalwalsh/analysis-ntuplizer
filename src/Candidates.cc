@@ -33,6 +33,8 @@
 #include "DataFormats/L1Trigger/interface/Jet.h"
 #include "DataFormats/L1Trigger/interface/Muon.h"
 
+#include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
+#include "DataFormats/RecoCandidate/interface/RecoChargedCandidateFwd.h"
 
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
@@ -107,8 +109,9 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    is_genparticle_     = std::is_same<T,reco::GenParticle>::value;
    is_trigobject_      = std::is_same<T,pat::TriggerObject>::value;
    is_trigobject_reco_ = std::is_same<T,trigger::TriggerObject>::value;
-   is_l1tjet_           = std::is_same<T,l1t::Jet>::value;
-   is_l1tmuon_          = std::is_same<T,l1t::Muon>::value;
+   is_l1tjet_          = std::is_same<T,l1t::Jet>::value;
+   is_l1tmuon_         = std::is_same<T,l1t::Muon>::value;
+   is_chargedcand_     = std::is_same<T,reco::RecoChargedCandidate>::value;
    
 //   do_kinematics_ = ( is_l1jet_ || is_l1muon_ || is_calojet_ || is_pfjet_ || is_patjet_ || is_patmuon_ || is_genjet_ || is_genparticle_ );
    do_kinematics_ = true;
@@ -698,3 +701,4 @@ template class Candidates<pat::TriggerObject>;
 template class Candidates<trigger::TriggerObject>;
 template class Candidates<l1t::Jet>;
 template class Candidates<l1t::Muon>;
+template class Candidates<reco::RecoChargedCandidate>;

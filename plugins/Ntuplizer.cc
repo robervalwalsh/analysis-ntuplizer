@@ -42,6 +42,10 @@
 #include "DataFormats/L1Trigger/interface/L1MuonParticle.h"
 #include "DataFormats/L1Trigger/interface/L1MuonParticleFwd.h"
 
+#include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
+#include "DataFormats/RecoCandidate/interface/RecoChargedCandidateFwd.h"
+
+
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 
@@ -127,6 +131,7 @@ typedef analysis::ntuple::TriggerAccepts TriggerAccepts;
 typedef analysis::ntuple::Vertices PrimaryVertices;
 typedef analysis::ntuple::Candidates<l1t::Jet> L1TJetCandidates;
 typedef analysis::ntuple::Candidates<l1t::Muon> L1TMuonCandidates;
+typedef analysis::ntuple::Candidates<reco::RecoChargedCandidate> ChargedCandidates;
 
 
 // Alias to the pointers to the above classes
@@ -150,6 +155,7 @@ typedef std::unique_ptr<TriggerAccepts> pTriggerAccepts;
 typedef std::unique_ptr<PrimaryVertices> pPrimaryVertices;
 typedef std::unique_ptr<L1TJetCandidates> pL1TJetCandidates;
 typedef std::unique_ptr<L1TMuonCandidates> pL1TMuonCandidates;
+typedef std::unique_ptr<ChargedCandidates> pChargedCandidates;
 
 //
 // class declaration
@@ -202,6 +208,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       bool do_lumiscalers_;
       bool do_l1tjets_;
       bool do_l1tmuons_;
+      bool do_chargedcands_;
       
       bool readprescale_;
       
@@ -232,6 +239,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::map<std::string, edm::EDGetTokenT<reco::JetTagCollection> > jetTagTokens_;
       std::map<std::string, edm::EDGetTokenT<l1t::JetBxCollection> > l1tJetTokens_;
       std::map<std::string, edm::EDGetTokenT<l1t::MuonBxCollection> > l1tMuonTokens_;
+      std::map<std::string, edm::EDGetTokenT<reco::RecoChargedCandidateCollection> > chargedCandTokens_;
 
 #ifndef CMSSWOLD
       std::shared_ptr<HLTPrescaleProvider> hltPrescaleProvider_;
@@ -289,6 +297,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::vector<pTriggerObjectRecoCandidates> triggerobjectsreco_collections_;
       std::vector<pL1TJetCandidates> l1tjets_collections_;
       std::vector<pL1TMuonCandidates> l1tmuons_collections_;
+      std::vector<pChargedCandidates> chargedcands_collections_;
       
       
       
@@ -354,6 +363,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config) //:   // initialization of
          if ( inputTags == "JetsTags" ) jetTagTokens_[collection_name] = consumes<reco::JetTagCollection>(collection);
          if ( inputTags == "L1TJets" ) l1tJetTokens_[collection_name] = consumes<l1t::JetBxCollection>(collection);
          if ( inputTags == "L1TMuons" ) l1tMuonTokens_[collection_name] = consumes<l1t::MuonBxCollection>(collection);
+         if ( inputTags == "ChargedCandidates" ) chargedCandTokens_[collection_name] = consumes<reco::RecoChargedCandidateCollection>(collection);
      }
    }
    
@@ -485,6 +495,10 @@ void Ntuplizer::analyze(const edm::Event& event, const edm::EventSetup& setup)
       for ( auto & collection : l1tmuons_collections_ )
          collection -> Fill(event);
       
+   // charged candidates (reco)
+      for ( auto & collection : chargedcands_collections_ )
+         collection -> Fill(event);
+
       
 }
 
@@ -516,6 +530,7 @@ Ntuplizer::beginJob()
    do_genruninfo_       = config_.exists("GenRunInfo") && is_mc_ ;
    do_l1tjets_          = config_.exists("L1TJets");
    do_l1tmuons_         = config_.exists("L1TMuons");
+   do_chargedcands_     = config_.exists("ChargedCandidates");
    
    if ( config_.exists("TestMode") ) // This is DANGEROUS! but can be useful. So BE CAREFUL!!!!
       testmode_ = config_.getParameter<bool> ("TestMode");
@@ -793,6 +808,12 @@ Ntuplizer::beginJob()
             {
                std::cout << "Ntuplizer: # l1 muon collections > 1. Skipping." << std::endl;
             }
+         }
+         // Charged candidates
+         if ( inputTags == "ChargedCandidates" )
+         {
+            chargedcands_collections_.push_back( pChargedCandidates( new ChargedCandidates(collection, tree_[name], is_mc_ ) ));
+            chargedcands_collections_.back() -> Init();
          }
          
          // Trigger Objects
