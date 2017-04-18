@@ -72,6 +72,8 @@ process.TFileService = TFileService
 from Analysis.Ntuplizer.NtuplizerData80X_cfi import ntuplizer
 process.MssmHbbTrigger = ntuplizer
 process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2MuonCandidates'),cms.InputTag('hltL3MuonCandidates') )
+process.MssmHbbTrigger.CaloJets = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
+process.MssmHbbTrigger.PFJets = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
 
 process.Ntuplizer = cms.Sequence(process.triggerFilter2 + process.MssmHbbTrigger)
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
