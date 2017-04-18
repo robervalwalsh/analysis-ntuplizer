@@ -27,7 +27,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('/store/data/Run2016H/ZeroBiasBunchTrains0/RAW/v1/000/283/171/00000/00B47F48-3192-E611-A382-FA163E605F68.root'),
+    fileNames = cms.untracked.vstring('/store/data/Run2016H/ZeroBiasBunchTrains0/RAW/v1/000/283/171/00000/2E41F4FF-EA91-E611-9DBB-02163E0145F1.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
