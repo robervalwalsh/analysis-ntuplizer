@@ -53,16 +53,20 @@ process = ProcessName(process)
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_hlt_GRun', '')
 
+process.triggerFilter.triggerConditions  = cms.vstring  (
+                                  'HLT_ZeroBias_BunchTrains_part*',
+                                  )
+
 # Path and EndPath definitions
 process.L1RePack_step = cms.Path(process.SimL1Emulator)
 process.endjob_step = cms.EndPath(process.endOfProcess)
 
 # Trigger filter
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
-process.triggerFilter2 = triggerFilter
-process.triggerFilter2.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
-process.triggerFilter2.triggerConditions  = cms.vstring  (
-                                  'HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v1*',
+process.localFilter = triggerFilter
+process.localFilter.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
+process.localFilter.triggerConditions  = cms.vstring  (
+                                  'HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v*',
                                   )
 
 # Ntuplizer
@@ -75,7 +79,7 @@ process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2Muon
 process.MssmHbbTrigger.CaloJets = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
 process.MssmHbbTrigger.PFJets = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
 
-process.Ntuplizer = cms.Sequence(process.triggerFilter2 + process.MssmHbbTrigger)
+process.Ntuplizer = cms.Sequence(process.localFilter + process.MssmHbbTrigger)
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
 
 
