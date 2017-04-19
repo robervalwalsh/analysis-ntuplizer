@@ -64,7 +64,10 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 
 #_______________ Addition to cmsDriver - begin
 
-# trigger filter
+# pileup filter MC
+process.RemovePileUpDominatedEventsGen = cms.EDFilter("RemovePileUpDominatedEventsGen")
+
+# Trigger filter (HLT config)
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
 
 # =========================
@@ -78,12 +81,12 @@ process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT' )
 process.triggerFilter.triggerConditions  = cms.vstring  (
                                   'HLT_ZeroBias_BunchTrains_part*',
                                   )
-# comment the line below if no filter is required
-#process.HLTBeginSequence = cms.Sequence( process.hltTriggerType + process.HLTL1UnpackerSequence + process.HLTBeamSpot )
-process.HLTBeginSequence.insert(-1,process.triggerFilter)
+# comment or modified the lines below if no filter or other filters are required
+process.HLTBeginSequence.insert(-1,process.triggerFilter)                    # data
+#process.HLTBeginSequence.insert(-1,process.RemovePileUpDominatedEventsGen)   # qcd MC
 # =========================
 
-# Trigger filter
+# Trigger filter (this config)
 process.localFilter = triggerFilter.clone()
 process.localFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
 process.localFilter.triggerConditions  = cms.vstring  (
@@ -96,14 +99,19 @@ process.TFileService = TFileService.clone()
 
 from Analysis.Ntuplizer.Ntuplizer_cfi import ntuplizer
 process.MssmHbbTrigger = ntuplizer.clone()
-process.MssmHbbTrigger.JetsTags  = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
-process.MssmHbbTrigger.L1TJets   = cms.VInputTag(cms.InputTag('hltCaloStage2Digis','Jet'))
-process.MssmHbbTrigger.L1TMuons  = cms.VInputTag(cms.InputTag('hltGmtStage2Digis','Muon'))
+process.MssmHbbTrigger.MonteCarlo        = cms.bool(False)
+process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
+process.MssmHbbTrigger.L1TJets           = cms.VInputTag(cms.InputTag('hltCaloStage2Digis','Jet'))
+process.MssmHbbTrigger.L1TMuons          = cms.VInputTag(cms.InputTag('hltGmtStage2Digis','Muon'))
 process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2MuonCandidates'),cms.InputTag('hltL3MuonCandidates') )
-process.MssmHbbTrigger.CaloJets = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
-process.MssmHbbTrigger.PFJets = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
-process.MssmHbbTrigger.TriggerResults = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
-process.MssmHbbTrigger.TriggerPaths = cms.vstring ('HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
+process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
+process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
+process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
+process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
+# MC specific
+#process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT"),
+#process.MssmHbbTrigger.GenFilterInfo     = cms.InputTag("genFilterEfficiencyProducer"),
+#process.MssmHbbTrigger.GenRunInfo        = cms.InputTag("generator"),                  
 
 process.Ntuplizer = cms.Sequence(process.localFilter + process.MssmHbbTrigger)
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
