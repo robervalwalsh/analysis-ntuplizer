@@ -18,7 +18,7 @@ process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.SimL1EmulatorRepack_FullMC_cff')
-process.load('HLTrigger.Configuration.HLT_User80Xv35_cff')
+process.load('HLTrigger.Configuration.HLT_User_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
@@ -60,6 +60,12 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 
 #_______________ Addition to cmsDriver - begin
 
+isMC = True
+
+## Filter counter (maybe more useful for MC)
+process.TotalEvents    = cms.EDProducer("EventCountProducer")
+process.FilteredEvents = cms.EDProducer("EventCountProducer")
+
 # pileup filter MC
 process.RemovePileUpDominatedEventsGen = cms.EDFilter("RemovePileUpDominatedEventsGen")
 
@@ -77,11 +83,22 @@ process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT' )
 process.triggerFilter.triggerConditions  = cms.vstring  (
                                   'HLT_ZeroBias_BunchTrains_part*',
                                   )
+# =========================                                  
+# Filtering the trigger sequence                                  
 # comment or modified the lines below if no filter or other filters are required
-#process.HLTBeginSequence.insert(-1,process.triggerFilter)                    # data
-process.HLTBeginSequence.insert(-1,process.RemovePileUpDominatedEventsGen)   # qcd MC
+if isMC:
+   process.HLTBeginSequence.insert(-1,process.RemovePileUpDominatedEventsGen)   # qcd MC
+else:
+   process.HLTBeginSequence.insert(-1,process.triggerFilter)                    # data
 # =========================
 
+
+# Trigger filter (ZeroBias) - this is needed because of the pileup filter
+process.zbFilter = triggerFilter.clone()
+process.zbFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
+process.zbFilter.triggerConditions  = cms.vstring  (
+                                  'HLT_ZeroBias_v*',
+                                  )
 # Trigger filter (this config)
 process.localFilter = triggerFilter.clone()
 process.localFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
@@ -95,7 +112,7 @@ process.TFileService = TFileService.clone()
 
 from Analysis.Ntuplizer.Ntuplizer_cfi import ntuplizer
 process.MssmHbbTrigger = ntuplizer.clone()
-process.MssmHbbTrigger.MonteCarlo        = cms.bool(True)
+process.MssmHbbTrigger.MonteCarlo        = cms.bool(isMC)
 process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
 process.MssmHbbTrigger.L1TJets           = cms.VInputTag(cms.InputTag('hltCaloStage2Digis','Jet'))
 process.MssmHbbTrigger.L1TMuons          = cms.VInputTag(cms.InputTag('hltGmtStage2Digis','Muon'))
@@ -104,16 +121,22 @@ process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4Cal
 process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
 process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
 process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
-# MC specific
-process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT")
-process.MssmHbbTrigger.GenFilterInfo     = cms.InputTag("genFilterEfficiencyProducer")
-process.MssmHbbTrigger.GenRunInfo        = cms.InputTag("generator")
+process.MssmHbbTrigger.TotalEvents       = cms.InputTag("TotalEvents")
+process.MssmHbbTrigger.FilteredEvents    = cms.InputTag("FilteredEvents")
+if isMC:
+   # MC specific
+   process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT")
+   process.MssmHbbTrigger.GenFilterInfo     = cms.InputTag("genFilterEfficiencyProducer")
+   process.MssmHbbTrigger.GenRunInfo        = cms.InputTag("generator")
 
-process.Ntuplizer = cms.Sequence(process.localFilter + process.MssmHbbTrigger)
+process.Ntuplizer = cms.Sequence( process.TotalEvents + process.localFilter  + process.FilteredEvents + process.MssmHbbTrigger)
+if isMC:
+   # MC specific
+   process.Ntuplizer.insert(0,process.zbFilter)
+   
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
 
 #_______________ Addition to cmsDriver - end
-
 
 # Schedule definition
 process.schedule = cms.Schedule(process.L1RePack_step)
