@@ -80,31 +80,18 @@ from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
 #                                  'HLT_ZeroBias_part0_v*',
 process.triggerFilter = triggerFilter.clone()
 process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT' )
-process.triggerFilter.triggerConditions  = cms.vstring  (
-                                  'HLT_ZeroBias_BunchTrains_part*',
-                                  )
+process.triggerFilter.triggerConditions  = cms.vstring  ('HLT_BTagMu_DiJet20_Mu5_v*')
 # =========================                                  
 # Filtering the trigger sequence                                  
 # comment or modified the lines below if no filter or other filters are required
 if isMC:
+   process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
+   process.triggerFilter.triggerConditions  = cms.vstring('HLT_ZeroBias_v*')
    process.HLTBeginSequence.insert(-1,process.RemovePileUpDominatedEventsGen)   # qcd MC
 else:
    process.HLTBeginSequence.insert(-1,process.triggerFilter)                    # data
 # =========================
 
-
-# Trigger filter (ZeroBias) - this is needed because of the pileup filter
-process.zbFilter = triggerFilter.clone()
-process.zbFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
-process.zbFilter.triggerConditions  = cms.vstring  (
-                                  'HLT_ZeroBias_v*',
-                                  )
-# Trigger filter (this config)
-process.localFilter = triggerFilter.clone()
-process.localFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
-process.localFilter.triggerConditions  = cms.vstring  (
-                                  'HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v*',
-                                  )
 
 # Ntuplizer
 from Analysis.Ntuplizer.Ntuplizer_cfi import TFileService
@@ -113,26 +100,24 @@ process.TFileService = TFileService.clone()
 from Analysis.Ntuplizer.Ntuplizer_cfi import ntuplizer
 process.MssmHbbTrigger = ntuplizer.clone()
 process.MssmHbbTrigger.MonteCarlo        = cms.bool(isMC)
-process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
+process.MssmHbbTrigger.TotalEvents       = cms.InputTag("TotalEvents")
+process.MssmHbbTrigger.FilteredEvents    = cms.InputTag("FilteredEvents")
+process.MssmHbbTrigger.PrimaryVertices   = cms.VInputTag(cms.InputTag('hltFastPrimaryVertex'),cms.InputTag('hltFastPVPixelVertices'))
 process.MssmHbbTrigger.L1TJets           = cms.VInputTag(cms.InputTag('hltCaloStage2Digis','Jet'))
 process.MssmHbbTrigger.L1TMuons          = cms.VInputTag(cms.InputTag('hltGmtStage2Digis','Muon'))
 process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2MuonCandidates'),cms.InputTag('hltL3MuonCandidates') )
 process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
+process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
 process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
 process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
-process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
-process.MssmHbbTrigger.TotalEvents       = cms.InputTag("TotalEvents")
-process.MssmHbbTrigger.FilteredEvents    = cms.InputTag("FilteredEvents")
+process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_ZeroBias_v','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
 if isMC:
    # MC specific
    process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT")
    process.MssmHbbTrigger.GenFilterInfo     = cms.InputTag("genFilterEfficiencyProducer")
    process.MssmHbbTrigger.GenRunInfo        = cms.InputTag("generator")
 
-process.Ntuplizer = cms.Sequence( process.TotalEvents + process.localFilter  + process.FilteredEvents + process.MssmHbbTrigger)
-if isMC:
-   # MC specific
-   process.Ntuplizer.insert(0,process.zbFilter)
+process.Ntuplizer = cms.Sequence( process.TotalEvents + process.triggerFilter  + process.FilteredEvents + process.MssmHbbTrigger)
    
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
 
