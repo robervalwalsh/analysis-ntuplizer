@@ -26,6 +26,10 @@ process.maxEvents = cms.untracked.PSet(
 )
 
 # Input source
+# Examples
+# ('/store/data/Run2016H/BTagMu/RAW/v1/000/283/408/00000/78879B75-CC94-E611-BAE6-02163E0146EA.root'),
+# ('/store/data/Run2016H/ZeroBiasBunchTrains0/RAW/v1/000/283/171/00000/2E41F4FF-EA91-E611-9DBB-02163E0145F1.root'),
+# ('/store/data/Run2016H/ParkingZeroBias0/RAW/v1/000/283/885/00000/5453166E-DA9D-E611-A050-FA163EEEB45D.root'),
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring('/store/data/Run2016H/ZeroBiasBunchTrains0/RAW/v1/000/283/171/00000/2E41F4FF-EA91-E611-9DBB-02163E0145F1.root'),
     secondaryFileNames = cms.untracked.vstring()
@@ -53,40 +57,63 @@ process = ProcessName(process)
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_hlt_GRun', '')
 
-process.triggerFilter.triggerConditions  = cms.vstring  (
-                                  'HLT_ZeroBias_BunchTrains_part*',
-                                  )
-
 # Path and EndPath definitions
 process.L1RePack_step = cms.Path(process.SimL1Emulator)
 process.endjob_step = cms.EndPath(process.endOfProcess)
 
-# Trigger filter
+
+#_______________ Addition to cmsDriver - begin
+
+# trigger filter
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
-process.localFilter = triggerFilter
-process.localFilter.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
+
+# =========================
+# Trigger config modifications
+# Example triggers
+#                                  'HLT_BTagMu_DiJet20_Mu5_v*',
+#                                  'HLT_ZeroBias_BunchTrains_part*',
+#                                  'HLT_ZeroBias_part0_v*',
+process.triggerFilter = triggerFilter.clone()
+process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT' )
+process.triggerFilter.triggerConditions  = cms.vstring  (
+                                  'HLT_ZeroBias_BunchTrains_part*',
+                                  )
+# comment the line below if no filter is required
+#process.HLTBeginSequence = cms.Sequence( process.hltTriggerType + process.HLTL1UnpackerSequence + process.HLTBeamSpot )
+process.HLTBeginSequence.insert(-1,process.triggerFilter)
+# =========================
+
+# Trigger filter
+process.localFilter = triggerFilter.clone()
+process.localFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
 process.localFilter.triggerConditions  = cms.vstring  (
                                   'HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v*',
                                   )
 
 # Ntuplizer
 from Analysis.Ntuplizer.Ntuplizer_cfi import TFileService
-process.TFileService = TFileService
+process.TFileService = TFileService.clone()
 
-from Analysis.Ntuplizer.NtuplizerData80X_cfi import ntuplizer
-process.MssmHbbTrigger = ntuplizer
+from Analysis.Ntuplizer.Ntuplizer_cfi import ntuplizer
+process.MssmHbbTrigger = ntuplizer.clone()
+process.MssmHbbTrigger.JetsTags  = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
+process.MssmHbbTrigger.L1TJets   = cms.VInputTag(cms.InputTag('hltCaloStage2Digis','Jet'))
+process.MssmHbbTrigger.L1TMuons  = cms.VInputTag(cms.InputTag('hltGmtStage2Digis','Muon'))
 process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2MuonCandidates'),cms.InputTag('hltL3MuonCandidates') )
 process.MssmHbbTrigger.CaloJets = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
 process.MssmHbbTrigger.PFJets = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
+process.MssmHbbTrigger.TriggerResults = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
+process.MssmHbbTrigger.TriggerPaths = cms.vstring ('HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
 
 process.Ntuplizer = cms.Sequence(process.localFilter + process.MssmHbbTrigger)
 process.ntuplizer_step = cms.EndPath(process.Ntuplizer)
 
+#_______________ Addition to cmsDriver - end
 
 # Schedule definition
 process.schedule = cms.Schedule(process.L1RePack_step)
 process.schedule.extend(process.HLTSchedule)
-process.schedule.extend([process.endjob_step,process.ntuplizer_step])
+process.schedule.extend([process.endjob_step,process.ntuplizer_step]) # Modified wrt cmsDriver 
 
 # customisation of the process.
 
