@@ -100,7 +100,10 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
             {
 #ifndef CMSSWOLD          
                const std::pair<std::vector<std::pair<std::string,int> >,int> ps = hlt_prescale_->prescaleValuesInDetail(event,setup,hlt_config_.triggerName(j));
-               psl1_[i] = ps.first[0].second;
+               if ( ps.first.size() > 0 )
+                  psl1_[i] = ps.first[0].second;
+               else
+                  psl1_[i] = -1;
                pshlt_[i] = ps.second;
 #else
                std::pair< int, int > ps = hlt_config_.prescaleValues (event, setup, hlt_config_.triggerName(j));

@@ -23,9 +23,9 @@ if ARGSN < 3:
 # ---
 # Some parameter steering
 RUN_RANGE       = ''
-UNITS_PER_JOB   = 50
+UNITS_PER_JOB   = 10
 TYPE            = 'DATA'
-CAMPAIGN        = 'Run2016/80x_triggerstudies17_run2016hv1_raw_userv29p1'
+CAMPAIGN        = 'Run2016/80x_triggerstudies17_run2016hv1_raw_userv35'
 
 ARGS = sys.argv
 PSET = ARGS[1]
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
 # ====== GENERAL
    config.General.workArea += '_' + PROCESS
-
+   config.General.transferLogs = False
 
 # ====== DATA   
    config.Data.splitting   = 'LumiBased'

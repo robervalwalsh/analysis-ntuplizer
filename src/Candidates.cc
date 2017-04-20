@@ -30,6 +30,12 @@
 #include "DataFormats/L1Trigger/interface/L1MuonParticle.h"
 #include "DataFormats/L1Trigger/interface/L1MuonParticleFwd.h"
 
+#include "DataFormats/L1Trigger/interface/Jet.h"
+#include "DataFormats/L1Trigger/interface/Muon.h"
+
+#include "DataFormats/RecoCandidate/interface/RecoChargedCandidate.h"
+#include "DataFormats/RecoCandidate/interface/RecoChargedCandidateFwd.h"
+
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 
@@ -70,6 +76,8 @@ namespace analysis {
       template <> void Candidates<pat::TriggerObject>::ReadFromEvent(const edm::Event& event);
       template <> void Candidates<pat::Jet>::JECRecord(const std::string & jr);
       template <> void Candidates<trigger::TriggerObject>::ReadFromEvent(const edm::Event& event);
+      template <> void Candidates<l1t::Jet>::ReadFromEvent(const edm::Event& event);
+      template <> void Candidates<l1t::Muon>::ReadFromEvent(const edm::Event& event);
       template <> void Candidates<trigger::TriggerObject>::Kinematics();
  }
 }   
@@ -101,6 +109,9 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    is_genparticle_     = std::is_same<T,reco::GenParticle>::value;
    is_trigobject_      = std::is_same<T,pat::TriggerObject>::value;
    is_trigobject_reco_ = std::is_same<T,trigger::TriggerObject>::value;
+   is_l1tjet_          = std::is_same<T,l1t::Jet>::value;
+   is_l1tmuon_         = std::is_same<T,l1t::Muon>::value;
+   is_chargedcand_     = std::is_same<T,reco::RecoChargedCandidate>::value;
    
 //   do_kinematics_ = ( is_l1jet_ || is_l1muon_ || is_calojet_ || is_pfjet_ || is_patjet_ || is_patmuon_ || is_genjet_ || is_genparticle_ );
    do_kinematics_ = true;
@@ -156,6 +167,39 @@ void Candidates<T>::ReadFromEvent(const edm::Event& event)
    edm::Handle<std::vector<T> > handler;
    event.getByLabel(input_collection_, handler);
    candidates_ = *(handler.product());
+}
+// Specialization for l1t jets
+template <>
+void Candidates<l1t::Jet>::ReadFromEvent(const edm::Event& event)
+{
+   using namespace edm;
+
+   // Candidates
+   candidates_.clear();
+   edm::Handle<l1t::JetBxCollection> handler;
+   event.getByLabel(input_collection_, handler);
+   BXVector<l1t::Jet> l1jets = *(handler.product());
+   for ( auto l1jet : l1jets )
+   {
+      candidates_.push_back(l1jet);
+   }
+   
+}
+// Specialization for l1t muons
+template <>
+void Candidates<l1t::Muon>::ReadFromEvent(const edm::Event& event)
+{
+   using namespace edm;
+
+   // Candidates
+   candidates_.clear();
+   edm::Handle<l1t::MuonBxCollection> handler;
+   event.getByLabel(input_collection_, handler);
+   BXVector<l1t::Muon> l1muons = *(handler.product());
+   for ( auto l1muon : l1muons )
+   {
+      candidates_.push_back(l1muon);
+   }
 }
 
 // Specialization for trigger objects (pat)
@@ -655,3 +699,6 @@ template class Candidates<reco::GenJet>;
 template class Candidates<reco::GenParticle>;
 template class Candidates<pat::TriggerObject>;
 template class Candidates<trigger::TriggerObject>;
+template class Candidates<l1t::Jet>;
+template class Candidates<l1t::Muon>;
+template class Candidates<reco::RecoChargedCandidate>;
