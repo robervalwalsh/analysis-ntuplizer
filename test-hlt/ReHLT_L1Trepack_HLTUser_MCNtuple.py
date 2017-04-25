@@ -23,12 +23,13 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(-1)
 )
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('/store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-300_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/50000/003C6E24-2415-E711-8D09-D067E5F91B8A.root'),
+ #   fileNames = cms.untracked.vstring('/store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-300_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/50000/003C6E24-2415-E711-8D09-D067E5F91B8A.root'),
+    fileNames = cms.untracked.vstring('/store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-120_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/00000/02C6F273-9115-E711-AF44-FA163E441C41.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -104,12 +105,12 @@ process.MssmHbbTrigger = ntuplizer.clone()
 process.MssmHbbTrigger.MonteCarlo        = cms.bool(isMC)
 process.MssmHbbTrigger.TotalEvents       = cms.InputTag("TotalEvents")
 process.MssmHbbTrigger.FilteredEvents    = cms.InputTag("FilteredEvents")
-process.MssmHbbTrigger.PrimaryVertices   = cms.VInputTag(cms.InputTag('hltFastPrimaryVertex'),cms.InputTag('hltFastPVPixelVertices'),cms.InputTag('hltVerticesPF'))
+process.MssmHbbTrigger.PrimaryVertices   = cms.VInputTag(cms.InputTag('hltFastPrimaryVertex'),cms.InputTag('hltFastPVPixelVertices'))
 process.MssmHbbTrigger.L1TJets           = cms.VInputTag(cms.InputTag('hltGtStage2Digis','Jet'))
 process.MssmHbbTrigger.L1TMuons          = cms.VInputTag(cms.InputTag('hltGtStage2Digis','Muon'))
 process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2MuonCandidates'),cms.InputTag('hltL3MuonCandidates') )
 process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
-process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'),cms.InputTag('hltCombinedSecondaryVertexBJetTagsPF'))
+process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
 process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
 process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
 if isMC:
