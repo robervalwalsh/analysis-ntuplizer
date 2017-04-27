@@ -23,7 +23,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(100)
 )
 
 # Input source
@@ -89,7 +89,7 @@ process.triggerFilter.triggerConditions  = cms.vstring  ('HLT_ZeroBias_v*')
 # comment or modified the lines below if no filter or other filters are required
 if isMC:
    process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
-   process.triggerFilter.triggerConditions  = cms.vstring('HLT_ZeroBias_v*','HLT_Mu_CaloJets_CaloBTagCSV_PFJets_v*')
+   process.triggerFilter.triggerConditions  = cms.vstring('HLT_ZeroBias_v*','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v*')
    process.HLTBeginSequence.insert(-1,process.RemovePileUpDominatedEventsGen)   # qcd MC
 else:
    process.HLTBeginSequence.insert(-1,process.triggerFilter)                    # data
@@ -112,7 +112,9 @@ process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2Muon
 process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
 process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
 process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
-process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
+# # For trigger info see Analysis.Ntuplizer.Ntuplizer_cfi
+# process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
+# process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_ZeroBias_v','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
 if isMC:
    # MC specific
    process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT")
