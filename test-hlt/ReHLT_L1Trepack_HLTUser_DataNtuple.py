@@ -30,6 +30,7 @@ process.maxEvents = cms.untracked.PSet(
 # ('/store/data/Run2016H/BTagMu/RAW/v1/000/283/408/00000/78879B75-CC94-E611-BAE6-02163E0146EA.root'),
 # ('/store/data/Run2016H/ZeroBiasBunchTrains0/RAW/v1/000/283/171/00000/2E41F4FF-EA91-E611-9DBB-02163E0145F1.root'),
 # ('/store/data/Run2016H/ParkingZeroBias0/RAW/v1/000/283/885/00000/5453166E-DA9D-E611-A050-FA163EEEB45D.root'),
+# ('/store/data/Run2016H/BTagCSV/RAW/v1/000/283/408/00000/9A682873-C694-E611-BBA9-FA163E7B08A4.root'),
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring('/store/data/Run2016H/BTagMu/RAW/v1/000/283/408/00000/78879B75-CC94-E611-BAE6-02163E0146EA.root'),
     secondaryFileNames = cms.untracked.vstring()
@@ -112,9 +113,10 @@ process.MssmHbbTrigger.L1TMuons          = cms.VInputTag(cms.InputTag('hltGmtSta
 process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2MuonCandidates'),cms.InputTag('hltL3MuonCandidates') )
 process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
 process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
-process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
-process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
-process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_ZeroBias_v','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
+process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJetsCorrected'),cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
+# # For trigger info see Analysis.Ntuplizer.Ntuplizer_cfi
+# process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
+# process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_ZeroBias_v','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
 if isMC:
    # MC specific
    process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT")

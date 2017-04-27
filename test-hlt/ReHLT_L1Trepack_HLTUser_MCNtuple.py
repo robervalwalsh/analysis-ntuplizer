@@ -80,7 +80,7 @@ from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
 #                                  'HLT_ZeroBias_part0_v*',
 process.triggerFilter = triggerFilter.clone()
 process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT' )
-process.triggerFilter.triggerConditions  = cms.vstring  ('HLT_BTagMu_DiJet20_Mu5_v*')
+process.triggerFilter.triggerConditions  = cms.vstring  ('HLT_ZeroBias_v*')
 # =========================                                  
 # Filtering the trigger sequence                                  
 # comment or modified the lines below if no filter or other filters are required
@@ -109,8 +109,9 @@ process.MssmHbbTrigger.ChargedCandidates = cms.VInputTag(cms.InputTag('hltL2Muon
 process.MssmHbbTrigger.CaloJets          = cms.VInputTag(cms.InputTag('hltAK4CaloJetsCorrectedIDPassed') )
 process.MssmHbbTrigger.JetsTags          = cms.VInputTag(cms.InputTag('hltCombinedSecondaryVertexBJetTagsCalo'))
 process.MssmHbbTrigger.PFJets            = cms.VInputTag(cms.InputTag('hltAK4PFJets'),cms.InputTag('hltAK4PFJetsLooseIDCorrected'),cms.InputTag('hltAK4PFJetsTightIDCorrected'))
-process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
-process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_ZeroBias_v','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
+# # For trigger info see Analysis.Ntuplizer.Ntuplizer_cfi
+# process.MssmHbbTrigger.TriggerResults    = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2'))
+# process.MssmHbbTrigger.TriggerPaths      = cms.vstring ('HLT_ZeroBias_v','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v')
 if isMC:
    # MC specific
    process.MssmHbbTrigger.PileupInfo        = cms.InputTag("addPileupInfo","","HLT")
