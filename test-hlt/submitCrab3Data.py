@@ -25,7 +25,7 @@ if ARGSN < 3:
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 50
 TYPE            = 'DATA'
-CAMPAIGN        = 'Run2016/80x_triggerstudies17_run2016hv1_raw_userv37'
+CAMPAIGN        = 'Run2016/80x_triggerstudies17_run2016hv1_raw_userv51'
 
 ARGS = sys.argv
 PSET = ARGS[1]
