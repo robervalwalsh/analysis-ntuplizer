@@ -96,8 +96,8 @@ hltGetConfiguration  /users/rwalsh/dev/CMSSW_9_0_X/MssmHbb/V7 \
 --mc \
 --unprescale \
 --process HLT2 \
---globaltag 90X_upgrade2017_TSG_Hcal_V2 \
---l1-emulator FullSimHcalTP \
+--globaltag 90X_upgrade2017_TSG_Hcal_V3 \
+--l1-emulator FullMC \
 --output full \
 --input /store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-300_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/50000/003C6E24-2415-E711-8D09-D067E5F91B8A.root \
 --max-events 10 \
@@ -113,8 +113,8 @@ hltGetConfiguration  /users/rwalsh/dev/CMSSW_9_0_X/MssmHbb/V7 \
 ====
 
 cmsDriver.py step2 \
---step=L1REPACK:FullSimHcalTP,HLT:User \
---conditions=90X_upgrade2017_TSG_Hcal_V2 \
+--step=L1REPACK:FullMC,HLT:User \
+--conditions=90X_upgrade2017_TSG_Hcal_V3 \
 --filein=/store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-300_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/50000/003C6E24-2415-E711-8D09-D067E5F91B8A.root \
 --secondfilein= \
 --custom_conditions= \
@@ -124,7 +124,7 @@ cmsDriver.py step2 \
 --datatier RAW\
 --eventcontent=RAW\
 --customise=HLTrigger/Configuration/CustomConfigs.L1THLT \
---era=Run2_2016 \
+--era=Run2_2017 \
 --customise= \
 --scenario=pp \
 --python_filename=ReHLT_L1Trepack_HLTUser_MCNtuple.py \
