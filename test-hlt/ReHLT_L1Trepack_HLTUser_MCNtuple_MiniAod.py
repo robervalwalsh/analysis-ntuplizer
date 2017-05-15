@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: step2 --step=L1REPACK:FullSimHcalTP,HLT:User --conditions=90X_upgrade2017_TSG_Hcal_V2 --filein=/store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-300_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/50000/003C6E24-2415-E711-8D09-D067E5F91B8A.root --secondfilein= --custom_conditions= --number=100 --mc --no_exec --datatier RAW --eventcontent=RAW --customise=HLTrigger/Configuration/CustomConfigs.L1THLT --era=Run2_2016 --customise= --scenario=pp --python_filename=ReHLT_L1Trepack_HLTUser_MCNtuple.py --processName=HLT2 --no_output
+# with command line options: step2 --step=L1REPACK:FullSimHcalTP,HLT:User --conditions=91X_upgrade2017_realistic_v3 --filein=/store/mc/PhaseIFall16DR/SUSYGluGluToBBHToBB_NarrowWidth_M-300_TuneCUETP8M1_13TeV-pythia8/GEN-SIM-RAW/FlatPU28to62HcalNZSRAW_90X_upgrade2017_realistic_v6_C1-v1/50000/003C6E24-2415-E711-8D09-D067E5F91B8A.root --secondfilein= --custom_conditions= --number=100 --mc --no_exec --datatier RAW --eventcontent=RAW --customise=HLTrigger/Configuration/CustomConfigs.L1THLT --era=Run2_2016 --customise= --scenario=pp --python_filename=ReHLT_L1Trepack_HLTUser_MCNtuple.py --processName=HLT2 --no_output
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.StandardSequences.Eras import eras
@@ -17,13 +17,13 @@ process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
-process.load('Configuration.StandardSequences.SimL1EmulatorRepack_FullSimHcalTP_cff')
+process.load('Configuration.StandardSequences.SimL1EmulatorRepack_FullMC_cff')
 process.load('HLTrigger.Configuration.HLT_User_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(10)
 )
 
 # Input source
@@ -56,7 +56,7 @@ from HLTrigger.Configuration.CustomConfigs import ProcessName
 process = ProcessName(process)
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '90X_upgrade2017_TSG_Hcal_V2', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '90X_upgrade2017_TSG_Hcal_V3', '')
 
 # Path and EndPath definitions
 process.L1RePack_step = cms.Path(process.SimL1Emulator)
@@ -92,7 +92,7 @@ process.triggerFilter.triggerConditions  = cms.vstring  ('HLT_ZeroBias_v*')
 # comment or modified the lines below if no filter or other filters are required
 if isMC:
    process.triggerFilter.hltResults = cms.InputTag( 'TriggerResults', '', 'HLT2' )
-   process.triggerFilter.triggerConditions  = cms.vstring('HLT_ZeroBias_v*','HLT_CaloJets_Muons_CaloBTagCSV_PFJets_v*')
+   process.triggerFilter.triggerConditions  = cms.vstring('HLT_ZeroBias_v*')
    process.HLTBeginSequence.insert(-1,process.RemovePileUpDominatedEventsGen)   # qcd MC
 else:
    process.HLTBeginSequence.insert(-1,process.triggerFilter)                    # data
@@ -102,6 +102,7 @@ else:
 # Ntuplizer
 from Analysis.Ntuplizer.Ntuplizer_cfi import TFileService
 process.TFileService = TFileService.clone()
+#process.TFileService.fileName = cms.string('/nfs/dust/cms/user/walsh/tmp/ntuple.root')
 
 from Analysis.Ntuplizer.Ntuplizer_cfi import ntuplizer
 process.MssmHbbTrigger = ntuplizer.clone()

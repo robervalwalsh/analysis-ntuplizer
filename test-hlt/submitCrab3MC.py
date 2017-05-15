@@ -24,9 +24,9 @@ if ARGSN < 3:
 
 # ---
 # Some parameter steering
-UNITS_PER_JOB   = 5
+UNITS_PER_JOB   = 5 
 TYPE            = 'MC'
-CAMPAIGN        = 'Trigger17/90x_triggerstudies17_phasei_fall16_flatpu28to62_userv25'
+CAMPAIGN        = 'Trigger17/91x_triggerstudies17_phasei_fall16_flatpu28to62_userv39'
 
 ARGS = sys.argv
 PSET = ARGS[1]
