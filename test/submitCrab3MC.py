@@ -24,9 +24,9 @@ if ARGSN < 3:
 
 # ---
 # Some parameter steering
-UNITS_PER_JOB   = 2
+UNITS_PER_JOB   = 1
 TYPE            = 'MC'
-CAMPAIGN        = 'Moriond17/80x_moriond17_data03Feb2017_v1'
+CAMPAIGN        = 'Trigger17/91x_trigger17_miniaodsim_v1'
 
 ARGS = sys.argv
 PSET = ARGS[1]
