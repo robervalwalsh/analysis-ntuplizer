@@ -250,6 +250,7 @@ void Candidates<trigger::TriggerObject>::ReadFromEvent(const edm::Event& event)
       const trigger::TriggerObjectCollection & triggerObjects = handler->getObjects();
       for ( auto & key : keys )
       {
+	 candidates_.reserve(candidates_.size()+keys.size()); 
          candidates_.push_back(triggerObjects[key]);
       }
    }
@@ -300,6 +301,19 @@ void Candidates<T>::Kinematics()
       et_[n]  = candidates_[i].et();
       q_[n]   = candidates_[i].charge();
       
+      // PAT MUONS
+      if ( is_patmuon_ )
+	{
+	  pat::Muon * muon = dynamic_cast<pat::Muon*> (&candidates_[i]);
+	  
+	  if ( muon -> isLooseMuon() )    // recoMuon is PFMuon && (isGlobal || isTracker ) 
+	    {
+	      normChi2_    [n] = muon->normChi2();
+	      nValidHits_ [n] = muon->numberOfValidHits();
+	    }
+
+	}
+
       // PAT JETS
       if ( is_patjet_ )
       {
@@ -570,6 +584,13 @@ void Candidates<T>::Branches()
          tree_->Branch("last_copy",lastcopy_,"last_copy[n]/O");
          tree_->Branch("higgs_dau",higgs_dau_,"higgs_dau[n]/O");
       }
+
+      if ( is_patmuon_ )
+        {
+	  tree_->Branch("normChi2", normChi2_, "normChi2[n]/F");
+	  tree_->Branch("nValidHits", nValidHits_, "nValidHits[n]/I");
+        }
+
       if ( is_patjet_ )
       {
          for ( size_t it = 0 ; it < btag_vars_.size() ; ++it )

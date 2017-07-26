@@ -98,6 +98,11 @@ namespace analysis {
             float et_[maxCandidates];
             int   q_[maxCandidates];
             
+	    // pat muons additional vars
+	    double normChi2_[maxCandidates];
+	    unsigned int nValidHits_[maxCandidates];
+ 
+	    // pat jet additional vars
             float btag_[15][maxCandidates];
             int   flavour_[maxCandidates];
             int   hadronFlavour_[maxCandidates];
@@ -146,7 +151,7 @@ namespace analysis {
             bool is_pfjet_;
             bool is_patjet_;
             bool is_patmuon_;
-            bool is_genjet_;
+	    bool is_genjet_;
             bool is_genparticle_;
             bool is_trigobject_;
             bool is_trigobject_reco_;
