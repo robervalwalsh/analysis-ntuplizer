@@ -98,10 +98,35 @@ namespace analysis {
             float et_[maxCandidates];
             int   q_[maxCandidates];
             
-	    // pat muons additional vars
-	    double normChi2_[maxCandidates];
-	    unsigned int nValidHits_[maxCandidates];
- 
+	    // pat muons
+	    bool isPFMuon_[maxCandidates];
+	    bool isGlobalMuon_[maxCandidates];
+	    bool isTrackerMuon_[maxCandidates];
+	    
+            // Inner tracker vars                                                                                                                                                                   
+            unsigned int trkLayerwMeasurement_[maxCandidates];
+            unsigned int pixelLayerwMeasurement_[maxCandidates];
+            unsigned int nValidPixelHits_[maxCandidates];
+	    double IPxy_[maxCandidates]; 
+	    double IPz_[maxCandidates];
+	    double validHitFraction_[maxCandidates];
+
+            // Global tracker vars                                                                                                                                                                   
+            double normChi2_[maxCandidates];
+            unsigned int nValidHits_[maxCandidates];
+	   
+	    // Combined quality
+            unsigned int nMatchedStations_[maxCandidates];
+	    unsigned int Chi2LocalPos_[maxCandidates];
+	    unsigned int trkKink_[maxCandidates];
+	    
+	    // Best Track
+	    double bestTrkIPxy_[maxCandidates];
+            double bestTrkIPz_[maxCandidates];
+	    double bestTrkPTerror_[maxCandidates];
+
+	    double segmentCompatibility_[maxCandidates];
+
 	    // pat jet additional vars
             float btag_[15][maxCandidates];
             int   flavour_[maxCandidates];
