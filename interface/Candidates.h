@@ -103,29 +103,29 @@ namespace analysis {
 	    bool isGlobalMuon_[maxCandidates];
 	    bool isTrackerMuon_[maxCandidates];
 	    
-            // Inner tracker vars                                                                                                                                                                   
+                 // Inner tracker vars                                                                                                                                                                   
             unsigned int trkLayerwMeasurement_[maxCandidates];
             unsigned int pixelLayerwMeasurement_[maxCandidates];
             unsigned int nValidPixelHits_[maxCandidates];
-	    double IPxy_[maxCandidates]; 
-	    double IPz_[maxCandidates];
 	    double validHitFraction_[maxCandidates];
+	    double segmentCompatibility_[maxCandidates];
+	    double dB_[maxCandidates]; // ip 
+	    double edB_[maxCandidates];
 
-            // Global tracker vars                                                                                                                                                                   
+                 // Global tracker vars                                                                                                                                                                   
             double normChi2_[maxCandidates];
             unsigned int nValidHits_[maxCandidates];
-	   
-	    // Combined quality
-            unsigned int nMatchedStations_[maxCandidates];
-	    unsigned int Chi2LocalPos_[maxCandidates];
-	    unsigned int trkKink_[maxCandidates];
-	    
-	    // Best Track
-	    double bestTrkIPxy_[maxCandidates];
-            double bestTrkIPz_[maxCandidates];
+	    unsigned int nMatchedStations_[maxCandidates];
 	    double bestTrkPTerror_[maxCandidates];
 
-	    double segmentCompatibility_[maxCandidates];
+	    // reco muon obsolete vars (IP -> dB for pat)
+
+	    // unsigned int Chi2LocalPos_[maxCandidates];
+	    //unsigned int trkKink_[maxCandidates];
+	    //double IPxy_[maxCandidates]; 
+	    //double IPz_[maxCandidates];
+	    //double bestTrkIPxy_[maxCandidates];
+            //double bestTrkIPz_[maxCandidates];
 
 	    // pat jet additional vars
             float btag_[15][maxCandidates];
