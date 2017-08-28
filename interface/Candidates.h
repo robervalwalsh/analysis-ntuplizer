@@ -57,7 +57,7 @@ namespace analysis {
             void ReadFromEvent(const edm::Event&);
             void BTagAlgorithms(const std::vector<std::string> &, const std::vector<std::string> &);
             void Init();
-            void Init(const std::vector<TitleAlias> &	);
+            void Init(const std::vector<TitleAlias> & );
             void AddJecInfo(const std::string & );
             void AddJecInfo(const std::string &, const std::string & );
             void AddJerInfo(const std::string &, const edm::InputTag & );
@@ -98,36 +98,23 @@ namespace analysis {
             float et_[maxCandidates];
             int   q_[maxCandidates];
             
-	    // pat muons
-	    bool isPFMuon_[maxCandidates];
-	    bool isGlobalMuon_[maxCandidates];
-	    bool isTrackerMuon_[maxCandidates];
-	    
-                 // Inner tracker vars                                                                                                                                                                   
-            unsigned int trkLayerwMeasurement_[maxCandidates];
-            unsigned int pixelLayerwMeasurement_[maxCandidates];
-            unsigned int nValidPixelHits_[maxCandidates];
-	    double validHitFraction_[maxCandidates];
-	    double segmentCompatibility_[maxCandidates];
-	    double dB_[maxCandidates]; // ip 
-	    double edB_[maxCandidates];
+            // pat muons
+            bool isPFMuon_[maxCandidates];
+            bool isGlobalMuon_[maxCandidates];
+            bool isTrackerMuon_[maxCandidates];
+            bool isLooseMuon_[maxCandidates];
+            bool isMediumMuon_[maxCandidates];
+            
+            // Inner tracker vars                                                                                                                                                                   
+            float validFraction_[maxCandidates];
+            float segmentCompatibility_[maxCandidates];
+            float trkKink_[maxCandidates];
+            float chi2LocalPos_[maxCandidates];
 
-                 // Global tracker vars                                                                                                                                                                   
+            // Global tracker vars                                                                                                                                                                   
             double normChi2_[maxCandidates];
-            unsigned int nValidHits_[maxCandidates];
-	    unsigned int nMatchedStations_[maxCandidates];
-	    double bestTrkPTerror_[maxCandidates];
 
-	    // reco muon obsolete vars (IP -> dB for pat)
-
-	    // unsigned int Chi2LocalPos_[maxCandidates];
-	    //unsigned int trkKink_[maxCandidates];
-	    //double IPxy_[maxCandidates]; 
-	    //double IPz_[maxCandidates];
-	    //double bestTrkIPxy_[maxCandidates];
-            //double bestTrkIPz_[maxCandidates];
-
-	    // pat jet additional vars
+            // pat jet additional vars
             float btag_[15][maxCandidates];
             int   flavour_[maxCandidates];
             int   hadronFlavour_[maxCandidates];
@@ -144,8 +131,11 @@ namespace analysis {
             float jerSF_[maxCandidates];
             float jerSFUp_[maxCandidates];
             float jerSFDown_[maxCandidates];            
-           	JME::JetResolution res_;
-           	JME::JetResolutionScaleFactor res_sf_;
+            JME::JetResolution res_;
+            JME::JetResolutionScaleFactor res_sf_;
+            
+            // QG Jet
+            float qgLikelihood_[maxCandidates];
                         
             int pdg_[maxCandidates];
             int status_[maxCandidates];
@@ -176,7 +166,7 @@ namespace analysis {
             bool is_pfjet_;
             bool is_patjet_;
             bool is_patmuon_;
-	    bool is_genjet_;
+            bool is_genjet_;
             bool is_genparticle_;
             bool is_trigobject_;
             bool is_trigobject_reco_;
