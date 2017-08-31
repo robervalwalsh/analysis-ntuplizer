@@ -250,7 +250,7 @@ void Candidates<trigger::TriggerObject>::ReadFromEvent(const edm::Event& event)
       const trigger::TriggerObjectCollection & triggerObjects = handler->getObjects();
       for ( auto & key : keys )
       {
-	 candidates_.reserve(candidates_.size()+keys.size()); 
+         candidates_.reserve(candidates_.size()+keys.size()); 
          candidates_.push_back(triggerObjects[key]);
       }
    }
@@ -303,38 +303,38 @@ void Candidates<T>::Kinematics()
       
       // PAT MUONS
       if ( is_patmuon_ )
-	{
-	  pat::Muon * muon = dynamic_cast<pat::Muon*> (&candidates_[i]);
-	 
-	  isPFMuon_       [n] = muon->isPFMuon()     ;
-	  isGlobalMuon_   [n] = muon->isGlobalMuon() ;
-	  isTrackerMuon_  [n] = muon->isTrackerMuon();
-	  
-	  //inner tracker
-	  trkLayerwMeasurement_   [n] = muon->innerTrack()->hitPattern().trackerLayersWithMeasurement()  ;
-	  pixelLayerwMeasurement_ [n] = muon->innerTrack()->hitPattern().pixelLayersWithMeasurement()    ;
-	  nValidPixelHits_        [n] = muon->innerTrack()->hitPattern().numberOfValidPixelHits()        ;
-	  validHitFraction_       [n] = muon->innerTrack()->validFraction()                              ;
-	  bestTrkPTerror_         [n] = muon->muonBestTrack()->ptError()/muon->muonBestTrack()->pt()     ;
-	  segmentCompatibility_   [n] = muon->segmentCompatibility()                                     ;
-	  dB_ [n]  = muon-> dB()  ;  //ip
-	  edB_ [n] = muon-> edB() ;
-	 
-          //global tracker
-	  normChi2_   [n] = muon->normChi2();
-	  nValidHits_ [n] = muon->numberOfValidHits();
-	  nMatchedStations_ [n] = muon->numberOfMatchedStations();
-	  
-	  // reco muon obsolete vars (ip -> dB for reco -> pat)
-	  //IPxy_ [n]                   = muon->innerTrack()->dxy(vertex->position)       ;
-	  //IPz_  [n]                   = muon->innerTrack()->dz(vertex->position)        ;
-          //Chi2LocalPos_     [n] = muon->combinedQuality().chi2LocalPosition();
-	  //trkKink_          [n] = muon->combinedQuality().trkKink();
-	  //bestTrk
-	  //bestTrkIPxy_     [n] = muon->muonBestTrack()->dxy(vertex->position()) ;
-	  //bestTrkIPz_      [n] = muon->muonBestTrack()->dz(vertex->position()) ;
-
-	}
+      {
+         pat::Muon * muon = dynamic_cast<pat::Muon*> (&candidates_[i]);
+         
+         isPFMuon_       [n] = muon->isPFMuon()     ;
+         isGlobalMuon_   [n] = muon->isGlobalMuon() ;
+         isTrackerMuon_  [n] = muon->isTrackerMuon();
+         
+         isLooseMuon_    [n] = muon->isLooseMuon() ; 
+         isMediumMuon_   [n] = muon->isMediumMuon(); 
+          
+         // default values
+         validFraction_          [n] = -1.;
+         segmentCompatibility_   [n] = -1.;
+         trkKink_                [n] = 9999.;
+         normChi2_               [n] = 9999.;
+         chi2LocalPos_           [n] = 9999.;
+         
+         if ( isPFMuon_[n] && ( isGlobalMuon_[n] || isTrackerMuon_[n] ) )
+         {
+        	  //inner tracker
+           validFraction_          [n] = muon->innerTrack()->validFraction();  
+           segmentCompatibility_   [n] = muon->segmentCompatibility()       ; 
+            
+           //global tracker - only for GlobalMuons
+           if ( isGlobalMuon_[n] ) 
+           {
+              normChi2_    [n] = muon->normChi2();                         
+              trkKink_     [n] = muon->combinedQuality().trkKink;          
+              chi2LocalPos_[n] = muon->combinedQuality().chi2LocalPosition;
+           }
+        }
+     }
 
       // PAT JETS
       if ( is_patjet_ )
@@ -345,6 +345,15 @@ void Candidates<T>::Kinematics()
 //         std::cout << "oioi   " << sv << std::endl;
 //         const reco::SecondaryVertexTagInfo * svTI = jet->tagInfoSecondaryVertex("secondaryVertex");
 //         std::cout << "oioi   " << svTI << std::endl;
+
+//          //          
+//          std::vector<std::string> tagNames = jet -> userIntNames();
+//          std::cout << "Jet has " << tagNames.size() << " tags" << std::endl;
+//          for ( size_t it = 0 ; it < tagNames.size() ; ++it ) 
+//          {
+//             std::cout << "    Tag Name = " << tagNames[it] << std::endl;
+//          }
+         
          
          for ( size_t it = 0 ; it < btag_vars_.size() ; ++it )
          {
@@ -416,7 +425,18 @@ void Candidates<T>::Kinematics()
             jerSF_[n]         = -1;
             jerSFUp_[n]       = -1;
             jerSFDown_[n]     = -1;
-         }         
+         } 
+         
+         // user floats
+         bool hasQG = false;
+         for ( auto & it : jet -> userFloatNames() )
+         { 
+            if ( it == "QGTagger:qgLikelihood" ) hasQG = true;
+         }
+         
+         // quark-gluon likelihood
+         qgLikelihood_[n] = -1.;
+         if ( hasQG ) qgLikelihood_[n] = jet->userFloat("QGTagger:qgLikelihood");
          
          
       }
@@ -609,22 +629,19 @@ void Candidates<T>::Branches()
 
       if ( is_patmuon_ )
         {
-	  tree_->Branch("isPFMuon",     isPFMuon_,     "isPFMuon[n]/I");
-	  tree_->Branch("isGlobalMuon", isGlobalMuon_, "isGlobalMuon[n]/I");
-	  tree_->Branch("isTrackerMuon",isTrackerMuon_,"isTrackerMuon[n]/I");
+          tree_->Branch("isPFMuon",     isPFMuon_,     "isPFMuon[n]/O");
+          tree_->Branch("isGlobalMuon", isGlobalMuon_, "isGlobalMuon[n]/O");
+          tree_->Branch("isTrackerMuon",isTrackerMuon_,"isTrackerMuon[n]/O");
+          tree_->Branch("isLooseMuon",  isLooseMuon_,  "isLooseMuon[n]/O");
+          tree_->Branch("isMediumMuon", isMediumMuon_, "isMediumMuon[n]/O");
 
-	  tree_->Branch("trkLayerwMeasurement",   trkLayerwMeasurement_,   "trkLayerwMeasurement[n]/I");
-	  tree_->Branch("pixelLayerwMeasurement", pixelLayerwMeasurement_, "pixelLayerwMeasurement[n]/I");
-	  tree_->Branch("nValidPixelHits",        nValidPixelHits_,        "nValidPixelHits[n]/I");
-	  tree_->Branch("validHitFraction",       validHitFraction_,       "validHitFraction[n]/F");
-	  tree_->Branch("segmentCompatibility",   segmentCompatibility_,   "segmentCompatibility[n]/F");
-          tree_->Branch("bestTrkPTerror",         bestTrkPTerror_,         "bestTrkPTerror[n]/F");
-	  tree_->Branch("dB",   dB_,   "dB[n]/F");
-	  tree_->Branch("edB",  edB_,  "edB[n]/F");
+          
+          tree_->Branch("validFraction",          validFraction_,          "validFraction[n]/F");
+          tree_->Branch("segmentCompatibility",   segmentCompatibility_,   "segmentCompatibility[n]/F");
 
-	  tree_->Branch("normChi2",   normChi2_,   "normChi2[n]/F");
-	  tree_->Branch("nValidHits", nValidHits_, "nValidHits[n]/I");
-          tree_->Branch("nMatchedStations", nMatchedStations_, "nMatchedStations[n]/I");
+          tree_->Branch("normChi2",     normChi2_,     "normChi2[n]/F");
+          tree_->Branch("trkKink",      trkKink_,      "trkKink[n]/F");
+          tree_->Branch("chi2LocalPos", chi2LocalPos_, "chi2LocalPos[n]/F");
 
         }
 
@@ -656,6 +673,7 @@ void Candidates<T>::Branches()
              tree_->Branch("jerSFDown",jerSFDown_,"jerSFDown[n]/F");
              tree_->Branch("Rho",&rho_,"Rho/D");
 //         }
+          tree_->Branch("qgLikelihood", qgLikelihood_, "qgLikelihood[n]/F");
          
       }
       if ( is_pfjet_ || is_patjet_ )
