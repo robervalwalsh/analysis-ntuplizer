@@ -58,6 +58,7 @@ namespace analysis {
             void BTagAlgorithms(const std::vector<std::string> &, const std::vector<std::string> &);
             void Init();
             void Init(const std::vector<TitleAlias> & );
+            void UseTriggerResults(edm::InputTag& );
             void AddJecInfo(const std::string & );
             void AddJecInfo(const std::string &, const std::string & );
             void AddJerInfo(const std::string &, const edm::InputTag & );
@@ -77,6 +78,7 @@ namespace analysis {
             std::vector<T> candidates_;
             std::string configParameter_;
             edm::InputTag input_collection_;
+            edm::InputTag triggerresults_collection_;
             
             std::string jecRecord_;
             std::string jecFile_;
@@ -112,7 +114,7 @@ namespace analysis {
             float chi2LocalPos_[maxCandidates];
 
             // Global tracker vars                                                                                                                                                                   
-            double normChi2_[maxCandidates];
+            float normChi2_[maxCandidates];
 
             // pat jet additional vars
             float btag_[15][maxCandidates];

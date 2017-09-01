@@ -649,6 +649,12 @@ Ntuplizer::beginJob()
    if ( config_.exists("CrossSection") )
       xsection_ = config_.getParameter<double>("CrossSection");
    
+   edm::InputTag trgRes;
+   if ( do_triggeraccepts_ ) 
+   {
+      InputTags trs = config_.getParameter<InputTags>("TriggerResults");
+      trgRes = trs[0];
+   }
    
   // Input tags (vector)
    for ( auto & inputTags : inputTagsVec_ )
@@ -817,7 +823,7 @@ Ntuplizer::beginJob()
          }
          
          // Trigger Objects
-         if ( do_triggerobjects_ && inputTags == "TriggerObjectStandAlone"  )
+         if ( do_triggeraccepts_  && do_triggerobjects_ && inputTags == "TriggerObjectStandAlone"  )
          {
             if ( triggerObjectLabels_.empty() )
                triggerObjectLabels_ = config_.getParameter< std::vector<std::string> >("TriggerObjectLabels");
@@ -833,6 +839,7 @@ Ntuplizer::beginJob()
                tree_[name] = triggerObjectsDir.make<TTree>(name.c_str(),name.c_str());
                triggerobjects_collections_.push_back(pTriggerObjectCandidates( new TriggerObjectCandidates(collection, tree_[name], is_mc_ ) ));
                triggerobjects_collections_.back() -> Init();
+               triggerobjects_collections_.back() -> UseTriggerResults(trgRes);
             }
          }
          
