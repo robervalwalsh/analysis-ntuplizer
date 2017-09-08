@@ -60,6 +60,9 @@
 
 #include "FWCore/Framework/interface/ESHandle.h"
 
+#include "DataFormats/Common/interface/TriggerResults.h"
+
+
 #include "TTree.h"
 
 
@@ -208,6 +211,10 @@ void Candidates<pat::TriggerObject>::ReadFromEvent(const edm::Event& event)
 {
    using namespace edm;
    
+   Handle<TriggerResults> trhandler;
+   event.getByLabel(triggerresults_collection_, trhandler);
+   const TriggerResults & trgres = *(trhandler.product());
+   
    candidates_.clear();
    // The stand alone collection
    edm::Handle<pat::TriggerObjectStandAloneCollection> handler;
@@ -216,8 +223,10 @@ void Candidates<pat::TriggerObject>::ReadFromEvent(const edm::Event& event)
    const std::string treename = tree_ -> GetName(); // using the label to name the tree
    const std::string delimiter = "_";
    std::string label = treename.substr(0, treename.find(delimiter));
+
    for ( auto ito : *handler )
    {
+      ito.unpackFilterLabels(event,trgres);
       if ( ito.filter(label) )
          candidates_.push_back(ito.triggerObject());
    }
@@ -725,6 +734,12 @@ void Candidates<T>::Init( const std::vector<TitleAlias> & btagVars )
       btag_vars_.erase(btag_vars_.begin()+15,btag_vars_.end());
    Init();
    
+}
+
+template <typename T>
+void Candidates<T>::UseTriggerResults(edm::InputTag& tr)
+{
+   triggerresults_collection_ = tr;
 }
 
 
