@@ -48,15 +48,13 @@ namespace analysis {
       class TriggerAccepts {
          public:
             TriggerAccepts();
-#ifndef CMSSWOLD        
-            TriggerAccepts(const edm::InputTag&, TTree*, const std::vector<std::string> &, const std::shared_ptr<HLTPrescaleProvider> hltPrescale , const bool & testmode = false);
-#endif            
-            TriggerAccepts(const edm::InputTag&, TTree*, const std::vector<std::string> &, const bool & testmode = false);
+            TriggerAccepts(const edm::InputTag&, TTree*, const std::vector<std::string> &, const std::vector<std::string> &, const std::shared_ptr<HLTPrescaleProvider> hltPrescale);
            ~TriggerAccepts();
             void Fill(const edm::Event & event, const edm::EventSetup & setup);
             void Branches();
-            void LumiBlock(edm::LuminosityBlock const & , edm::EventSetup const& );
             void Run(edm::Run const & , edm::EventSetup const& );
+            void Init();
+
             
             void ReadPrescaleInfo(const bool &);
             bool ReadPrescaleInfo();
@@ -66,17 +64,14 @@ namespace analysis {
             
             edm::InputTag input_collection_;
             HLTConfigProvider hlt_config_;
-#ifndef CMSSWOLD       
             std::shared_ptr<HLTPrescaleProvider> hlt_prescale_;
-#endif            
             std::vector<std::string> paths_;
-            std::vector<std::string> inpaths_;
+            std::vector<std::string> seeds_;
             bool accept_[1000];
             int psl1_[1000];
             int pshlt_[1000];
             
             bool first_;
-            bool testmode_;
             
             TTree * tree_;
             

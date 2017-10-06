@@ -23,7 +23,7 @@ process.TFileService = cms.Service('TFileService',
 )
 
 ## ============ TRIGGER FILTER =============== 
-## Enable below at cms.Path if needed 
+## Enable below at cms.Path if needed - DATA ONLY!!!
 process.triggerSelection = cms.EDFilter( 'TriggerResultsFilter',
     triggerConditions = cms.vstring(
 # physics triggers
@@ -34,7 +34,8 @@ process.triggerSelection = cms.EDFilter( 'TriggerResultsFilter',
                                      'HLT_DoublePFJets128MaxDeta1p6_DoubleCaloBTagCSV_p33_v*', 
                                      'HLT_Mu12_DoublePFJets54MaxDeta1p6_DoubleCaloBTagCSV_p33_v*', 
                                      'HLT_Mu12_DoublePFJets62MaxDeta1p6_DoubleCaloBTagCSV_p33_v*',
-#control triggers                                     
+# control triggers
+### btag                             
                                      'HLT_SingleJet30_Mu12_SinglePFJet40_v*', 
                                      'HLT_DoublePFJets40_CaloBTagCSV_p33_v*', 
                                      'HLT_DoublePFJets100_CaloBTagCSV_p33_v*', 
@@ -44,6 +45,22 @@ process.triggerSelection = cms.EDFilter( 'TriggerResultsFilter',
                                      'HLT_Mu12_DoublePFJets100_CaloBTagCSV_p33_v*', 
                                      'HLT_Mu12_DoublePFJets200_CaloBTagCSV_p33_v*', 
                                      'HLT_Mu12_DoublePFJets350_CaloBTagCSV_p33_v*', 
+### jet triggers
+                                     'HLT_PFJet40_v*', 
+                                     'HLT_PFJet60_v*', 
+                                     'HLT_PFJet80_v*', 
+                                     'HLT_PFJet140_v*', 
+                                     'HLT_PFJet200_v*', 
+                                     'HLT_PFJet260_v*', 
+                                     'HLT_PFJet320_v*', 
+                                     'HLT_PFJet400_v*', 
+                                     'HLT_PFJet450_v*', 
+                                     'HLT_PFJet500_v*', 
+                                     'HLT_PFJet550_v*', 
+
+### muon triggers
+                                     'HLT_Mu8_v*', 
+                                     'HLT_Mu3_PFJet40_v*', 
     ),
     hltResults = cms.InputTag( 'TriggerResults', '', 'HLT' ),
     l1tResults = cms.InputTag( '' ),
@@ -136,7 +153,8 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
                                      'HLT_DoublePFJets128MaxDeta1p6_DoubleCaloBTagCSV_p33_v', 
                                      'HLT_Mu12_DoublePFJets54MaxDeta1p6_DoubleCaloBTagCSV_p33_v', 
                                      'HLT_Mu12_DoublePFJets62MaxDeta1p6_DoubleCaloBTagCSV_p33_v',
-#control triggers                                     
+# control triggers
+### btag                             
                                      'HLT_SingleJet30_Mu12_SinglePFJet40_v', 
                                      'HLT_DoublePFJets40_CaloBTagCSV_p33_v', 
                                      'HLT_DoublePFJets100_CaloBTagCSV_p33_v', 
@@ -145,7 +163,47 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
                                      'HLT_Mu12_DoublePFJets40_CaloBTagCSV_p33_v', 
                                      'HLT_Mu12_DoublePFJets100_CaloBTagCSV_p33_v', 
                                      'HLT_Mu12_DoublePFJets200_CaloBTagCSV_p33_v', 
-                                     'HLT_Mu12_DoublePFJets350_CaloBTagCSV_p33_v', 
+                                     'HLT_Mu12_DoublePFJets350_CaloBTagCSV_p33_v',
+### jet triggers
+                                     'HLT_PFJet40_v', 
+                                     'HLT_PFJet60_v', 
+                                     'HLT_PFJet80_v', 
+                                     'HLT_PFJet140_v', 
+                                     'HLT_PFJet200_v', 
+                                     'HLT_PFJet260_v', 
+                                     'HLT_PFJet320_v', 
+                                     'HLT_PFJet400_v', 
+                                     'HLT_PFJet450_v', 
+                                     'HLT_PFJet500_v', 
+                                     'HLT_PFJet550_v', 
+
+### muon triggers
+                                     'HLT_Mu8_v', 
+                                     'HLT_Mu3_PFJet40_v', 
+
+                ),
+    L1Seeds    = cms.vstring  (
+                                     'L1_Mu3_JetC16_dEta_Max0p4_dPhi_Max0p4', 
+                                     'L1_Mu3_JetC60_dEta_Max0p4_dPhi_Max0p4',
+                                     'L1_Mu3_JetC120_dEta_Max0p4_dPhi_Max0p4',
+                                     'L1_Mu12er2p3_Jet40er2p3_dR_Max0p4_DoubleJet40er2p3_dEta_Max1p6',
+                                     'L1_DoubleJet40er3p0',
+                                     'L1_DoubleJet100er3p0',
+                                     'L1_DoubleJet112er3p0',
+                                     'L1_DoubleJet120er3p0',
+                                     'L1_DoubleJet100er2p3_dEta_Max1p6',
+                                     'L1_DoubleJet112er2p3_dEta_Max1p6',
+                                     'L1_ZeroBias',
+                                     'L1_SingleJet35',
+                                     'L1_SingleJet60',
+                                     'L1_SingleJet90',
+                                     'L1_SingleJet120',
+                                     'L1_SingleJet170',
+                                     'L1_SingleJet180',
+                                     'L1_SingleJet200',
+                                     'L1_SingleMu3',
+                                     'L1_SingleMu5',
+                                     'L1_SingleMu7',
                 ),
     TriggerObjectStandAlone  = cms.VInputTag(
                      cms.InputTag('slimmedPatTrigger'),
@@ -153,6 +211,7 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
     TriggerObjectLabels    = cms.vstring  (
 
                                              'hltL1DoubleJet100er2p3dEtaMax1p6',
+                                             'hltL1DoubleJet100er2p3dEtaMax1p6Ior112er2p3dEtaMax1p6',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp0p92DoubleWithMatching',
                                              'hltDoublePFJets100Eta2p3',
@@ -168,12 +227,14 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
                                              'hltBSoftMuonDiJet40Mu12L3FilterByDR',
 
                                              'hltL1DoubleJet100er2p3dEtaMax1p6',
+                                             'hltL1DoubleJet100er2p3dEtaMax1p6Ior112er2p3dEtaMax1p6',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp0p92DoubleWithMatching',
                                              'hltDoublePFJets116Eta2p3',
                                              'hltDoublePFJets116Eta2p3MaxDeta1p6',
 
                                              'hltL1DoubleJet100er2p3dEtaMax1p6',
+                                             'hltL1DoubleJet100er2p3dEtaMax1p6Ior112er2p3dEtaMax1p6',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp0p92DoubleWithMatching',
                                              'hltDoublePFJets128Eta2p3',
@@ -215,11 +276,13 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
                                              'hltDoublePFJets100Eta2p3',
 
                                              'hltL1DoubleJet112er3p0',
+                                             'hltL1DoubleJet120er3p0',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp0p92SingleWithMatching',
                                              'hltDoublePFJets200Eta2p3',
 
                                              'hltL1DoubleJet112er3p0',
+                                             'hltL1DoubleJet120er3p0',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp0p92SingleWithMatching',
                                              'hltDoublePFJets350Eta2p3',
@@ -255,6 +318,61 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
                                              'hltL3fL1sMu3Jet120L1f0L2f8L3Filtered12',
                                              'hltDoublePFBJets350Eta2p3',
                                              'hltBSoftMuonDiJet350Mu12L3FilterByDR',
+                                             
+                                             'hltL1sZeroBias',
+                                             'hltSingleCaloJet10',
+                                             'hltSinglePFJet40',
+                                             
+                                             'hltL1sSingleJet35',
+                                             'hltSingleCaloJet40',
+                                             'hltSinglePFJet60',
+                                             
+                                             'hltL1sSingleJet60',
+                                             'hltSingleCaloJet50',
+                                             'hltSinglePFJet80',
+                                             
+                                             'hltL1sSingleJet90',
+                                             'hltSingleCaloJet110',
+                                             'hltSinglePFJet140',
+                                             
+                                             'hltL1sSingleJet120',
+                                             'hltSingleCaloJet170',
+                                             'hltSinglePFJet200',
+                                             
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltSingleCaloJet210',
+                                             'hltSinglePFJet260',
+                                             
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltSingleCaloJet270',
+                                             'hltSinglePFJet320',
+                                             
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltSingleCaloJet350',
+                                             'hltSinglePFJet400',
+                                             
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltSingleCaloJet400',
+                                             'hltSinglePFJet450',
+                                             
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltSingleCaloJet450',
+                                             'hltSinglePFJet500',
+                                             
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltSingleCaloJet450',
+                                             'hltSinglePFJet550',
+                                             
+                                             'hltL1sSingleMu3IorSingleMu5IorSingleMu7',
+                                             'hltL1fL1sMu5L1Filtered0',
+                                             'hltL3fL1sMu5L1f0L2f5L3Filtered8',
+                                             
+                                             'hltL1sSingleMu3',
+                                             'hltL1fL1sMu3L1Filtered0',
+                                             'hltL1sSingleJet35ObjectMap',
+                                             'hltL3fL1sMu3L1f0L2f0L3Filtered3',
+                                             'hltMu3PFJet40MuCleaned',
+                                             
                 ),
 )
 
