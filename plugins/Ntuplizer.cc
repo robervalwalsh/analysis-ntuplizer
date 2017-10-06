@@ -74,6 +74,7 @@
 #include "Analysis/Ntuplizer/interface/Candidates.h"
 #include "Analysis/Ntuplizer/interface/JetsTags.h"
 #include "Analysis/Ntuplizer/interface/TriggerAccepts.h"
+//#include "Analysis/Ntuplizer/interface/TriggerInfo.h"
 #include "Analysis/Ntuplizer/interface/Vertices.h"
 
 #include "SimDataFormats/GeneratorProducts/interface/GenFilterInfo.h"
@@ -94,12 +95,7 @@
 #include <TFile.h>
 #include <TTree.h>
 
-
-
-
-#ifndef CMSSWOLD
 #include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
-#endif
 
 using namespace boost;
 using namespace boost::algorithm;
@@ -128,6 +124,7 @@ typedef analysis::ntuple::Candidates<pat::TriggerObject> TriggerObjectCandidates
 typedef analysis::ntuple::Candidates<trigger::TriggerObject> TriggerObjectRecoCandidates;
 typedef analysis::ntuple::JetsTags JetsTags;
 typedef analysis::ntuple::TriggerAccepts TriggerAccepts;
+//typedef analysis::ntuple::TriggerInfo TriggerInfo;
 typedef analysis::ntuple::Vertices PrimaryVertices;
 typedef analysis::ntuple::Candidates<l1t::Jet> L1TJetCandidates;
 typedef analysis::ntuple::Candidates<l1t::Muon> L1TMuonCandidates;
@@ -152,6 +149,7 @@ typedef std::unique_ptr<TriggerObjectCandidates> pTriggerObjectCandidates;
 typedef std::unique_ptr<TriggerObjectRecoCandidates> pTriggerObjectRecoCandidates;
 typedef std::unique_ptr<JetsTags> pJetsTags;
 typedef std::unique_ptr<TriggerAccepts> pTriggerAccepts;
+//typedef std::unique_ptr<TriggerInfo> pTriggerInfo;
 typedef std::unique_ptr<PrimaryVertices> pPrimaryVertices;
 typedef std::unique_ptr<L1TJetCandidates> pL1TJetCandidates;
 typedef std::unique_ptr<L1TMuonCandidates> pL1TMuonCandidates;
@@ -200,6 +198,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       bool do_pileupinfo_;
       bool do_geneventinfo_;
       bool do_triggeraccepts_;
+//      bool do_triggerinfo_;
       bool do_primaryvertices_;
       bool do_eventfilter_;
       bool do_genfilter_;
@@ -241,9 +240,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::map<std::string, edm::EDGetTokenT<l1t::MuonBxCollection> > l1tMuonTokens_;
       std::map<std::string, edm::EDGetTokenT<reco::RecoChargedCandidateCollection> > chargedCandTokens_;
 
-#ifndef CMSSWOLD
       std::shared_ptr<HLTPrescaleProvider> hltPrescaleProvider_;
-#endif
            
       edm::InputTag genFilterInfo_;
       edm::InputTag totalEvents_;
@@ -293,6 +290,7 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::vector<pJetsTags> jetstags_collections_;
       std::vector<pPrimaryVertices> primaryvertices_collections_;
       std::vector<pTriggerAccepts> triggeraccepts_collections_;
+//      std::vector<pTriggerInfo> triggerinfo_collections_;
       std::vector<pTriggerObjectCandidates> triggerobjects_collections_;
       std::vector<pTriggerObjectRecoCandidates> triggerobjectsreco_collections_;
       std::vector<pL1TJetCandidates> l1tjets_collections_;
@@ -367,9 +365,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config) //:   // initialization of
      }
    }
    
-#ifndef CMSSWOLD  
    hltPrescaleProvider_ = std::shared_ptr<HLTPrescaleProvider>(new HLTPrescaleProvider(config, consumesCollector(), *this));;
-#endif
    
    // Single InputTag
    for ( auto & inputTag : inputTags_ )
@@ -473,9 +469,13 @@ void Ntuplizer::analyze(const edm::Event& event, const edm::EventSetup& setup)
          collection -> Fill(event);
       
       
-      // trigger accecpts
+      // trigger accepts
       for ( auto & collection : triggeraccepts_collections_ )
          collection -> Fill(event, setup);
+      
+//       // trigger info
+//       for ( auto & collection : triggerinfo_collections_ )
+//          collection -> Fill(event, setup);
       
        // primary vertices
       for ( auto & collection : primaryvertices_collections_ )
@@ -522,6 +522,7 @@ Ntuplizer::beginJob()
    do_jetstags_         = config_.exists("JetsTags");
 //   do_triggeraccepts_   = config_.exists("TriggerResults") && config_.exists("TriggerPaths");
    do_triggeraccepts_   = config_.exists("TriggerResults");
+//   do_triggerinfo_      = config_.exists("TriggerResults");
    do_primaryvertices_  = config_.exists("PrimaryVertices");
 //   do_eventfilter_      = config_.exists("EventFilter");
    do_eventfilter_      = config_.exists("TotalEvents")  && config_.exists("FilteredEvents");
@@ -684,7 +685,7 @@ Ntuplizer::beginJob()
          if ( inputTags == "L1TMuons" && l1tmuons_collections_.size() == 0 )  name = "l1tMuons";
 
          // Initialise trees
-         if ( inputTags != "TriggerObjectStandAlone" && inputTags != "TriggerEvent"  )
+         if ( inputTags != "TriggerObjectStandAlone" && inputTags != "TriggerEvent" && inputTags != "TriggerResults"  )
             tree_[name] = eventsDir.make<TTree>(name.c_str(),fullname.c_str());
          
          // L1 Jets
@@ -866,17 +867,37 @@ Ntuplizer::beginJob()
          if ( do_triggeraccepts_ && inputTags == "TriggerResults" )
          {
             // TriggerResults collections names differ by the process, so add it to the name
-            std::vector< std::string> trigger_paths;
-            trigger_paths.clear();
-            if ( config_.exists("TriggerPaths") ) trigger_paths = config_.getParameter< std::vector< std::string> >("TriggerPaths");
-#ifndef CMSSWOLD           
-            triggeraccepts_collections_.push_back( pTriggerAccepts( new TriggerAccepts(collection, tree_[name], trigger_paths, hltPrescaleProvider_, testmode_) ));
-#else
-            triggeraccepts_collections_.push_back( pTriggerAccepts( new TriggerAccepts(collection, tree_[name], trigger_paths, testmode_) ));  
-#endif                      
-//            triggeraccepts_collections_.back() -> Branches();
+            std::vector< std::string> triggerpaths;
+            triggerpaths.clear();
+            std::vector< std::string> l1seeds;
+            l1seeds.clear();
+            
+            tree_[name] = eventsDir.make<TTree>("TriggerAccepts",fullname.c_str());
+            if ( config_.exists("TriggerPaths") ) triggerpaths = config_.getParameter< std::vector< std::string> >("TriggerPaths");
+            if ( config_.exists("L1Seeds") ) l1seeds = config_.getParameter< std::vector< std::string> >("L1Seeds");
+            
+            triggeraccepts_collections_.push_back( pTriggerAccepts( new TriggerAccepts(collection, tree_[name], triggerpaths, l1seeds, hltPrescaleProvider_) ));
+            triggeraccepts_collections_.back() -> Init();
             triggeraccepts_collections_.back() -> ReadPrescaleInfo(readprescale_);  // sometimes an error occurs as if the collection was not consumed!??? See TriggerAccepts
          }
+         
+//          // TriggerInfo
+//          if ( do_triggerinfo_ && inputTags == "TriggerResults" )
+//          {
+//             // TriggerResults collections names differ by the process, so add it to the name
+//             std::vector< std::string> triggerpaths;
+//             triggerpaths.clear();
+//             if ( config_.exists("TriggerPaths") ) triggerpaths = config_.getParameter< std::vector< std::string> >("TriggerPaths");
+//             TFileDirectory triggerResultsDir = eventsDir.mkdir("TriggerResults");
+//             
+//             for ( auto & path : triggerpaths )
+//             {
+//                name = path;
+//                tree_[name] = triggerResultsDir.make<TTree>(name.c_str(),name.c_str());
+//                triggerinfo_collections_.push_back( pTriggerInfo( new TriggerInfo(collection, tree_[name], path, hltPrescaleProvider_, testmode_) ));
+//                triggerinfo_collections_.back() -> ReadPrescaleInfo(readprescale_);  // sometimes an error occurs as if the collection was not consumed!??? See TriggerAccepts
+//             }
+//          }
          
          // Primary Vertices
          if ( inputTags == "PrimaryVertices" )

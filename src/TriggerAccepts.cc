@@ -13,6 +13,8 @@
 
 // system include files
 #include <iostream>
+#include <boost/algorithm/string.hpp>
+
 // 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -37,30 +39,24 @@ TriggerAccepts::TriggerAccepts()
    // default constructor
 }
 
-#ifndef CMSSWOLD
-TriggerAccepts::TriggerAccepts(const edm::InputTag& tag, TTree* tree, const std::vector<std::string>& inpaths, const std::shared_ptr<HLTPrescaleProvider> hltPrescale , const bool & testmode)
+TriggerAccepts::TriggerAccepts(const edm::InputTag& tag, TTree* tree, const std::vector<std::string>& paths, const std::vector<std::string>& seeds, const std::shared_ptr<HLTPrescaleProvider> hltPrescale)
 {
    hlt_prescale_ = hltPrescale;
    input_collection_ = tag;
    tree_ = tree;
-   inpaths_ = inpaths;
    paths_.clear();
+   seeds_.clear();
+   paths_ = paths;
+   seeds_ = seeds;
+   
+   // remove duplicates of paths
+   sort( paths_.begin(), paths_.end() );
+   paths_.erase( unique( paths_.begin(), paths_.end() ), paths_.end() );
+   // remove duplicates of seeds
+   sort( seeds_.begin(), seeds_.end() );
+   seeds_.erase( unique( seeds_.begin(), seeds_.end() ), seeds_.end() );
+   
    first_ = true;
-   testmode_ = testmode;
-   if ( inpaths_.size() == 0 ) testmode_ = true;
-   psinfo_ = true;
-}
-#endif
-
-TriggerAccepts::TriggerAccepts(const edm::InputTag& tag, TTree* tree, const std::vector<std::string>& inpaths, const bool & testmode)
-{
-   input_collection_ = tag;
-   tree_ = tree;
-   inpaths_ = inpaths;
-   paths_.clear();
-   first_ = true;
-   testmode_ = testmode;
-   if ( inpaths_.size() == 0 ) testmode_ = true;
    psinfo_ = true;
 }
 
@@ -80,9 +76,18 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
 {
    using namespace edm;
    
-   // reset trigger accepts
+   // reset trigger accepts and prescales to default -1
    for (size_t i = 0; i < paths_.size() ; ++i )
+   {
       accept_[i] = false;
+      pshlt_[i] = -1;
+   }
+   std::map<std::string, bool> l1done; // L1 prescale only once per event
+   for (size_t i = 0; i < seeds_.size() ; ++i )
+   {
+      psl1_[i] = -1;
+      l1done[seeds_[i]] = false;
+   }
 
    Handle<TriggerResults> handler;
    event.getByLabel(input_collection_, handler);
@@ -94,24 +99,28 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
       {
          if ( hlt_config_.triggerName(j).find(paths_[i]) == 0 )
          {
-            psl1_[i] = 1.;
-            pshlt_[i] = 1.;
+            // trigger accepted?
+            accept_[i] = triggers.accept(j);
+            // get prescale info if requested
             if ( psinfo_ )
             {
-#ifndef CMSSWOLD          
                const std::pair<std::vector<std::pair<std::string,int> >,int> ps = hlt_prescale_->prescaleValuesInDetail(event,setup,hlt_config_.triggerName(j));
-               if ( ps.first.size() > 0 )
-                  psl1_[i] = ps.first[0].second;
-               else
-                  psl1_[i] = -1;
+               // HLT prescale
                pshlt_[i] = ps.second;
-#else
-               std::pair< int, int > ps = hlt_config_.prescaleValues (event, setup, hlt_config_.triggerName(j));
-               psl1_[i] = ps.first;
-               pshlt_[i] = ps.second;
-#endif            
+               // Get L1 prescale of all seeds of the path
+               for ( size_t k = 0; k < ps.first.size(); ++k ) // loop over seeds of the path
+               {
+                  for ( size_t l = 0; l < seeds_.size(); ++l ) // loop over seeds passed by python config
+                  {
+                     if ( ! l1done[seeds_[l]] && ps.first[k].first == seeds_[l] )  // if prescale of L1 seed not read and seed is in path
+                     {
+                        psl1_[l] = ps.first[k].second;
+                        l1done[seeds_[l]] = true;
+                        break;
+                     }
+                  }
+               }
             }
-            if ( triggers.accept(j) ) accept_[i] = true;
          }
       }
    }
@@ -123,101 +132,28 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
 // ------------ method called once each job just before starting event loop  ------------
 void TriggerAccepts::Branches()
 {
+   // two loops for separation of accepts and prescales(?)
    for (size_t i = 0; i < paths_.size() ; ++i )
    {
       tree_->Branch(paths_[i].c_str(), &accept_[i], (paths_[i]+"/O").c_str());
-      tree_->Branch(("psl1_"+paths_[i]).c_str(), &psl1_[i], ("psl1_"+paths_[i]+"/I").c_str());
+   }
+   for (size_t i = 0; i < paths_.size() ; ++i )
+   {
       tree_->Branch(("pshlt_"+paths_[i]).c_str(), &pshlt_[i], ("pshlt_"+paths_[i]+"/I").c_str());
    }
-   // std::cout << "TriggerAccepts Branches ok" << std::endl;
-}
-
-void TriggerAccepts::LumiBlock(edm::LuminosityBlock const & lumi, edm::EventSetup const& setup)
-{
-   bool changed;
-#ifndef CMSSWOLD          
-   hlt_prescale_->init(lumi.getRun(), setup, input_collection_.process(), changed);
-   hlt_config_ = hlt_prescale_->hltConfigProvider();
-#else
-   hlt_config_.init(lumi.getRun(), setup, input_collection_.process(), changed);
-#endif            
-   
-   std::vector<std::string> names = hlt_config_.triggerNames();
-   
-   if ( first_ )  // using this kind of resource to get the names from the configuration, when needed.
+   for (size_t i = 0; i < seeds_.size() ; ++i )
    {
-      if ( ! testmode_ )
-         paths_ = inpaths_;
-      else
-      {
-         if ( inpaths_.size() == 0 ) // means all paths will be considered
-            paths_ = names;
-         else
-         {
-            for ( size_t i = 0 ; i < inpaths_.size() ; ++i )
-            {
-               for ( size_t j = 0 ; j < hlt_config_.size() ; ++j )
-               {
-                  if ( paths_.size() >= 1000 )
-                  {
-                     std::cout << "analysis::ntuple::TriggerAccepts::LumiBlock - Number of trigger paths is larger than 1000." << std::endl;
-                     std::cout << "                                              Not all trigger paths will be considered."    << std::endl;
-                     break;
-                  }
-                  if ( hlt_config_.triggerName(j).find(inpaths_[i]) == 0 )
-                     paths_.push_back(hlt_config_.triggerName(j));
-               }
-            }
-         }
-      }
-      this->Branches();
-      first_ = false;
+      tree_->Branch(("psl1_"+seeds_[i]).c_str(), &psl1_[i], ("psl1_"+seeds_[i]+"/I").c_str());
    }
-
+   // std::cout << "TriggerAccepts Branches ok" << std::endl;
 }
 
 void TriggerAccepts::Run(edm::Run const & run, edm::EventSetup const& setup)
 {
    bool changed;
-#ifndef CMSSWOLD          
    hlt_prescale_->init(run, setup, input_collection_.process(), changed);
    hlt_config_ = hlt_prescale_->hltConfigProvider();
-#else
-   hlt_config_.init(lumi.getRun(), setup, input_collection_.process(), changed);
-#endif            
-
-   std::vector<std::string> names = hlt_config_.triggerNames();
    
-   if ( first_ )  // using this kind of resource to get the names from the configuration, when needed.
-   {
-      if ( ! testmode_ )
-         paths_ = inpaths_;
-      else
-      {
-         if ( inpaths_.size() == 0 ) // means all paths will be considered
-            paths_ = names;
-         else
-         {
-            for ( size_t i = 0 ; i < inpaths_.size() ; ++i )
-            {
-               for ( size_t j = 0 ; j < hlt_config_.size() ; ++j )
-               {
-                  if ( paths_.size() >= 1000 )
-                  {
-                     std::cout << "analysis::ntuple::TriggerAccepts::Run - Number of trigger paths is larger than 1000." << std::endl;
-                     std::cout << "                                              Not all trigger paths will be considered."    << std::endl;
-                     break;
-                  }
-                  if ( hlt_config_.triggerName(j).find(inpaths_[i]) == 0 )
-                     paths_.push_back(hlt_config_.triggerName(j));
-               }
-            }
-         }
-      }
-      this->Branches();
-      first_ = false;
-   }
-
 }
 void TriggerAccepts::ReadPrescaleInfo(const bool & ok)
 {
@@ -226,4 +162,9 @@ void TriggerAccepts::ReadPrescaleInfo(const bool & ok)
 bool TriggerAccepts::ReadPrescaleInfo()
 {
    return psinfo_;
+}
+
+void TriggerAccepts::Init()
+{
+   Branches();
 }

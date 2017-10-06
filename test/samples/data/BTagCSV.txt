@@ -1,0 +1,3 @@
+/BTagCSV/Run2017C-PromptReco-v1/MINIAOD
+/BTagCSV/Run2017C-PromptReco-v2/MINIAOD
+/BTagCSV/Run2017C-PromptReco-v3/MINIAOD
