@@ -139,11 +139,11 @@ void TriggerAccepts::Branches()
    }
    for (size_t i = 0; i < paths_.size() ; ++i )
    {
-      tree_->Branch(("pshlt_"+paths_[i]).c_str(), &pshlt_[i], ("pshlt_"+paths_[i]+"/I").c_str());
+      tree_->Branch(("ps_"+paths_[i]).c_str(), &pshlt_[i], ("ps_"+paths_[i]+"/I").c_str());
    }
    for (size_t i = 0; i < seeds_.size() ; ++i )
    {
-      tree_->Branch(("psl1_"+seeds_[i]).c_str(), &psl1_[i], ("psl1_"+seeds_[i]+"/I").c_str());
+      tree_->Branch(("ps_"+seeds_[i]).c_str(), &psl1_[i], ("ps_"+seeds_[i]+"/I").c_str());
    }
    // std::cout << "TriggerAccepts Branches ok" << std::endl;
 }

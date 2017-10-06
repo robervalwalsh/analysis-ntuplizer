@@ -685,7 +685,7 @@ Ntuplizer::beginJob()
          if ( inputTags == "L1TMuons" && l1tmuons_collections_.size() == 0 )  name = "l1tMuons";
 
          // Initialise trees
-         if ( inputTags != "TriggerObjectStandAlone" && inputTags != "TriggerEvent" && inputTags != "TriggerResults"  )
+         if ( inputTags != "TriggerObjectStandAlone" && inputTags != "TriggerEvent" )
             tree_[name] = eventsDir.make<TTree>(name.c_str(),fullname.c_str());
          
          // L1 Jets
@@ -872,7 +872,6 @@ Ntuplizer::beginJob()
             std::vector< std::string> l1seeds;
             l1seeds.clear();
             
-            tree_[name] = eventsDir.make<TTree>("TriggerAccepts",fullname.c_str());
             if ( config_.exists("TriggerPaths") ) triggerpaths = config_.getParameter< std::vector< std::string> >("TriggerPaths");
             if ( config_.exists("L1Seeds") ) l1seeds = config_.getParameter< std::vector< std::string> >("L1Seeds");
             
