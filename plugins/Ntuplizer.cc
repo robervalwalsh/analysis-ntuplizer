@@ -218,6 +218,8 @@ class Ntuplizer : public edm::EDAnalyzer {
       std::vector< std::string > btagAlgos_;
       std::vector< std::string > btagAlgosAlias_;
       std::vector< std::string > triggerObjectLabels_;
+      std::vector< std::string > triggerObjectSplits_;
+      std::vector< std::string > triggerObjectSplitsTypes_;
       std::vector< TitleAlias >  btagVars_;
       std::vector< std::string > jecRecords_;
       std::vector< std::string > jerRecords_;
@@ -657,6 +659,35 @@ Ntuplizer::beginJob()
       trgRes = trs[0];
    }
    
+   // split trigger objects
+   bool splitTriggerObject = false;
+   if ( do_triggerobjects_ && triggerObjectSplits_.empty() )
+   {
+      triggerObjectSplits_  = config_.getParameter< std::vector<std::string> >("TriggerObjectSplits");
+      if ( ! triggerObjectSplits_.empty() && triggerObjectSplitsTypes_.empty() )
+      {
+         triggerObjectSplitsTypes_ = config_.getParameter< std::vector<std::string> >("TriggerObjectSplitsTypes");
+         for ( auto & tot : triggerObjectSplitsTypes_ ) std::transform(tot.begin(), tot.end(), tot.begin(), ::tolower);
+         splitTriggerObject = !triggerObjectSplitsTypes_.empty();
+      }
+   }
+   
+   if ( triggerObjectSplits_.size() != triggerObjectSplitsTypes_.size() )
+   {
+      std::cout << "-w- Ntuplizer: Size of trigger splits and splits types do not match!" << std::endl;
+      std::cout << "               No splitting will be done" << std::endl;
+      splitTriggerObject = false;
+   }
+   
+//    if ( splitTriggerObject )
+//    {
+//       std::cout << "oioioi " << splitTriggerObject << std::endl;
+//       for ( size_t ito = 0 ; ito < triggerObjectSplits_.size() ; ++ito )
+//         std::cout << triggerObjectSplits_[ito] << "   " << triggerObjectSplitsTypes_[ito] << std::endl;
+//    }
+//    
+//    
+   
   // Input tags (vector)
    for ( auto & inputTags : inputTagsVec_ )
    {
@@ -841,6 +872,31 @@ Ntuplizer::beginJob()
                triggerobjects_collections_.push_back(pTriggerObjectCandidates( new TriggerObjectCandidates(collection, tree_[name], is_mc_ ) ));
                triggerobjects_collections_.back() -> Init();
                triggerobjects_collections_.back() -> UseTriggerResults(trgRes);
+               if ( splitTriggerObject )
+               {
+                  std::vector<std::string> types;
+                  for ( size_t tos = 0; tos < triggerObjectSplits_.size() ; ++tos )
+                  {
+                     if ( triggerObjectSplits_.at(tos) == name )
+                     {
+                        boost::split(types,triggerObjectSplitsTypes_.at(tos),boost::is_any_of(":"));
+                        break;
+                     }
+                  }
+                  sort( types.begin(), types.end() );
+                  types.erase( unique( types.begin(), types.end() ), types.end() );
+                  for ( auto & tot : types )
+                  {
+                     std::string namesplit = name + "_" + tot;
+                     tree_[namesplit] = triggerObjectsDir.make<TTree>(namesplit.c_str(),namesplit.c_str());
+                     triggerobjects_collections_.push_back(pTriggerObjectCandidates( new TriggerObjectCandidates(collection, tree_[namesplit], is_mc_ ) ));
+                     triggerobjects_collections_.back() -> Init();
+                     triggerobjects_collections_.back() -> UseTriggerResults(trgRes);
+                     triggerobjects_collections_.back() -> TriggerObjectType(tot);
+                  }
+
+               }
+               
             }
          }
          
