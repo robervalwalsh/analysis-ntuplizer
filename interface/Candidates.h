@@ -59,6 +59,7 @@ namespace analysis {
             void Init();
             void Init(const std::vector<TitleAlias> & );
             void UseTriggerResults(edm::InputTag& );
+            void TriggerObjectType(const std::string &);
             void AddJecInfo(const std::string & );
             void AddJecInfo(const std::string &, const std::string & );
             void AddJerInfo(const std::string &, const edm::InputTag & );
@@ -191,6 +192,8 @@ namespace analysis {
             
             std::vector<TitleAlias>  id_vars_;
             std::vector<TitleAlias>  btag_vars_;
+            
+            std::string trigobj_type_;
    
             
       };

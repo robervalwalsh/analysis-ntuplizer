@@ -54,6 +54,7 @@
 #include "CommonTools/Utils/interface/PtComparator.h"
 
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
+#include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 #include "DataFormats/PatCandidates/interface/TriggerObjectStandAlone.h"
 
 #include "Analysis/Ntuplizer/interface/Candidates.h"
@@ -77,6 +78,7 @@ using namespace analysis::ntuple;
 namespace analysis {
    namespace ntuple {
       template <> void Candidates<pat::TriggerObject>::ReadFromEvent(const edm::Event& event);
+      template <> void Candidates<pat::TriggerObject>::TriggerObjectType(const std::string& trigobj_type);
       template <> void Candidates<pat::Jet>::JECRecord(const std::string & jr);
       template <> void Candidates<trigger::TriggerObject>::ReadFromEvent(const edm::Event& event);
       template <> void Candidates<l1t::Jet>::ReadFromEvent(const edm::Event& event);
@@ -144,6 +146,9 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    // JEC info default
    jecRecord_ = "";
    jecFile_   = "";
+   
+   // trigger object split
+   trigobj_type_ = "";
     
 }
 
@@ -228,12 +233,46 @@ void Candidates<pat::TriggerObject>::ReadFromEvent(const edm::Event& event)
    {
       ito.unpackFilterLabels(event,trgres);
       if ( ito.filter(label) )
-         candidates_.push_back(ito.triggerObject());
+      {
+         if ( trigobj_type_ != "" )
+         {
+            int type = ito.triggerObject().triggerObjectTypes().at(0);
+            if ( trigobj_type_ == "l1muon" )
+            {
+               if ( type == trigger::TriggerL1Mu )               candidates_.push_back(ito.triggerObject());
+            }
+            else if ( trigobj_type_ == "l1jet" )
+            {
+               if ( type == trigger::TriggerL1Jet  )             candidates_.push_back(ito.triggerObject());
+            }
+            else if ( trigobj_type_ == "hltmuon" )
+            {
+               if ( type == trigger::TriggerMuon )               candidates_.push_back(ito.triggerObject());
+            }
+            else if ( trigobj_type_ == "hltjet" )
+            {
+               if ( type == trigger::TriggerJet )                candidates_.push_back(ito.triggerObject());
+            }
+            else if ( trigobj_type_ == "hltbjet" )
+            {
+               if ( type == trigger::TriggerBJet )               candidates_.push_back(ito.triggerObject());
+            }
+         }
+         else
+         {
+            candidates_.push_back(ito.triggerObject());
+         }
+      }
    }
    
    // Sort the objects by pt
    NumericSafeGreaterByPt<pat::TriggerObject> triggerObjectGreaterByPt;
    std::sort (candidates_.begin(), candidates_.end(),triggerObjectGreaterByPt);
+}
+template <>
+void Candidates<pat::TriggerObject>::TriggerObjectType(const std::string& trigobj_type)
+{
+   trigobj_type_ = trigobj_type;
 }
 
 // Specialization for trigger objects (trigger - reco)
