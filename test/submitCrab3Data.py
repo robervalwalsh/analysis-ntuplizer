@@ -25,7 +25,7 @@ if ARGSN < 3:
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
-CAMPAIGN        = 'Run2017/92x_promptreco_v2'
+CAMPAIGN        = 'Run2017/92x_promptreco_v3'
 
 ARGS = sys.argv
 PSET = ARGS[1]
