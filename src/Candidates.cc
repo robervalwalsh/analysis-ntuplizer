@@ -84,6 +84,8 @@ namespace analysis {
       template <> void Candidates<l1t::Jet>::ReadFromEvent(const edm::Event& event);
       template <> void Candidates<l1t::Muon>::ReadFromEvent(const edm::Event& event);
       template <> void Candidates<trigger::TriggerObject>::Kinematics();
+      template <> void Candidates<l1t::Jet>::Kinematics();
+      template <> void Candidates<l1t::Muon>::Kinematics();
  }
 }   
 //
@@ -191,7 +193,10 @@ void Candidates<l1t::Jet>::ReadFromEvent(const edm::Event& event)
    {
       candidates_.push_back(l1jet);
    }
-   
+      // Sort the objects by pt
+   NumericSafeGreaterByPt<l1t::Jet> l1tjetGreaterByPt;
+   std::sort (candidates_.begin(), candidates_.end(),l1tjetGreaterByPt);
+
 }
 // Specialization for l1t muons
 template <>
@@ -208,6 +213,10 @@ void Candidates<l1t::Muon>::ReadFromEvent(const edm::Event& event)
    {
       candidates_.push_back(l1muon);
    }
+      // Sort the objects by pt
+   NumericSafeGreaterByPt<l1t::Muon> l1tmuonGreaterByPt;
+   std::sort (candidates_.begin(), candidates_.end(),l1tmuonGreaterByPt);
+
 }
 
 // Specialization for trigger objects (pat)
@@ -565,6 +574,67 @@ void Candidates<trigger::TriggerObject>::Kinematics()
 
 }
 
+template <>
+void Candidates<l1t::Jet>::Kinematics()
+{
+   using namespace edm;
+
+   int n = 0;
+   
+   for ( size_t i = 0 ; i < candidates_.size(); ++i )
+   {
+      l1t::Jet * cand = dynamic_cast<l1t::Jet*> (&candidates_[i]);
+      if ( n >= maxCandidates ) break;
+      
+      pt_[n]  = cand->pt();
+      eta_[n] = cand->eta();
+      phi_[n] = cand->phi();
+      px_[n]  = cand->px();
+      py_[n]  = cand->py();
+      pz_[n]  = cand->pz();
+      e_[n]   = cand->energy();
+      et_[n]  = cand->et();
+      q_[n]   = cand->charge();
+      
+      ++n;
+   }
+   n_ = n;
+
+}
+
+template <>
+void Candidates<l1t::Muon>::Kinematics()
+{
+   using namespace edm;
+
+   int n = 0;
+   
+   for ( size_t i = 0 ; i < candidates_.size(); ++i )
+   {
+      l1t::Muon * cand = dynamic_cast<l1t::Muon*> (&candidates_[i]);
+      if ( n >= maxCandidates ) break;
+      
+      pt_[n]       = cand->pt();
+      eta_[n]      = cand->eta();
+      phi_[n]      = cand->phi();
+      px_[n]       = cand->px();
+      py_[n]       = cand->py();
+      pz_[n]       = cand->pz();
+      e_[n]        = cand->energy();
+      et_[n]       = cand->et();
+      q_[n]        = cand->charge();
+      hwQual_[n]   = cand->hwQual();
+      etaAtVtx_[n] = cand->etaAtVtx();
+      phiAtVtx_[n] = cand->phiAtVtx();
+
+      
+      ++n;
+   }
+   n_ = n;
+
+}
+
+
 
 template <typename T>
 void Candidates<T>::JECRecord(const std::string& jr)
@@ -751,6 +821,12 @@ void Candidates<T>::Branches()
          tree_->Branch("type", type_, "type[n]/I");
       }
       
+      if ( is_l1tmuon_ )
+      {
+         tree_->Branch("hwQual"  ,  hwQual_  , "hwQual[n]/I");
+         tree_->Branch("etaAtVtx",  etaAtVtx_, "etaAtVtx[n]/F");
+         tree_->Branch("phiAtVtx",  phiAtVtx_, "phiAtVtx[n]/F");
+      }
       
    }
       

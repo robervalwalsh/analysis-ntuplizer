@@ -158,7 +158,13 @@ namespace analysis {
             
             // type
             int  type_[maxCandidates];
-
+            
+            // L1 objects
+            int  hwQual_[maxCandidates];
+            // L1 muons
+            float etaAtVtx_[maxCandidates];
+            float phiAtVtx_[maxCandidates];
+            
             
             TTree * tree_;
             
