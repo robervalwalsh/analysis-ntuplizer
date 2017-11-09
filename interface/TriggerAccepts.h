@@ -68,6 +68,7 @@ namespace analysis {
             std::vector<std::string> paths_;
             std::vector<std::string> seeds_;
             bool accept_[1000];
+            bool l1accept_[1000];
             int psl1_[1000];
             int pshlt_[1000];
             

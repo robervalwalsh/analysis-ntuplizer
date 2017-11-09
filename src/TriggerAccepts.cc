@@ -86,6 +86,7 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
    for (size_t i = 0; i < seeds_.size() ; ++i )
    {
       psl1_[i] = -1;
+      l1accept_[i] = false;
       l1done[seeds_[i]] = false;
    }
 
@@ -93,6 +94,7 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
    event.getByLabel(input_collection_, handler);
    const TriggerResults & triggers = *(handler.product());
    
+   // l1 accept
    for ( size_t j = 0 ; j < hlt_config_.size() ; ++j )
    {
       for (size_t i = 0; i < paths_.size() ; ++i )
@@ -116,6 +118,7 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
                      {
                         psl1_[l] = ps.first[k].second;
                         l1done[seeds_[l]] = true;
+                        hlt_prescale_->l1tGlobalUtil().getFinalDecisionByName (seeds_[l], l1accept_[l]);
                         break;
                      }
                   }
@@ -124,7 +127,6 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
          }
       }
    }
-
    tree_ -> Fill();
    
 }
@@ -136,6 +138,10 @@ void TriggerAccepts::Branches()
    for (size_t i = 0; i < paths_.size() ; ++i )
    {
       tree_->Branch(paths_[i].c_str(), &accept_[i], (paths_[i]+"/O").c_str());
+   }
+   for (size_t i = 0; i < seeds_.size() ; ++i )
+   {
+      tree_->Branch(seeds_[i].c_str(), &l1accept_[i], (seeds_[i]+"/O").c_str());
    }
    for (size_t i = 0; i < paths_.size() ; ++i )
    {
