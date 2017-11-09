@@ -17,7 +17,8 @@ P  = '\033[35m' # purple
 
 ARGSN = len(sys.argv)
 if ARGSN < 3:
-   print (R+"You need to provide the CMSSW python config and the samples file in this order"+W)
+   print (R+"You need to provide the CMSSW python config and the samples file in this order."+W)
+   print (R+"Optionally you can provide the UNITS_PER_JOB (def. 500)"+W)
    sys.exit()
 
 # ---
@@ -25,12 +26,14 @@ if ARGSN < 3:
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
-CAMPAIGN        = 'Run2017/92x_promptreco_v3'
+CAMPAIGN        = 'Run2017/92x_promptreco_v4'
 
 ARGS = sys.argv
 PSET = ARGS[1]
 SAMPLE = ARGS[2]
-
+if ARGSN == 4:
+   UNITS_PER_JOB = int(ARGS[3])
+   
 psetname, pset_ext = os.path.splitext(PSET)
 samplename, sample_ext = os.path.splitext(SAMPLE)
 
