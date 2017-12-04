@@ -332,7 +332,7 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config) //:   // initialization of
    {
       readprescale_ = config.getParameter<bool> ("ReadPrescale");
    }
-   use_full_name_ = true;
+   use_full_name_ = false;
    testmode_      = false;
    inputTagsVec_ = config.getParameterNamesForType<InputTags>();
    inputTags_    = config.getParameterNamesForType<edm::InputTag>();
