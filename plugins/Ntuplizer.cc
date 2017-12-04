@@ -804,13 +804,13 @@ Ntuplizer::beginJob()
          // Gen Jets
          if ( inputTags == "GenJets" )
          {
-            genjets_collections_.push_back( pGenJetCandidates( new GenJetCandidates(collection, tree_[name], is_mc_, 10., 6. ) ));
+            genjets_collections_.push_back( pGenJetCandidates( new GenJetCandidates(collection, tree_[name], is_mc_ ) ));
             genjets_collections_.back() -> Init();
          }
          // Gen Particles
          if ( inputTags == "GenParticles" )
          {
-            genparticles_collections_.push_back( pGenParticleCandidates( new GenParticleCandidates(collection, tree_[name], is_mc_, 0.1, 6. ) ));
+            genparticles_collections_.push_back( pGenParticleCandidates( new GenParticleCandidates(collection, tree_[name], is_mc_ ) ));
             genparticles_collections_.back() -> Init();
         }
          // Jets Tags
