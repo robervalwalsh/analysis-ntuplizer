@@ -816,7 +816,7 @@ Ntuplizer::beginJob()
          // Jets Tags
          if ( inputTags == "JetsTags" )
          {
-            jetstags_collections_.push_back( pJetsTags( new JetsTags(collection, tree_[name], 0., 10.) ));
+            jetstags_collections_.push_back( pJetsTags( new JetsTags(collection, tree_[name]) ));
             jetstags_collections_.back() -> Branches();
          }
    
