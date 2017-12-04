@@ -42,7 +42,7 @@ namespace analysis {
       class JetsTags {
          public:
             JetsTags();
-            JetsTags(const edm::InputTag&, TTree*, float minPt = 20., float minEta = 10.);
+            JetsTags(const edm::InputTag&, TTree*, float minPt = -1., float minEta = -1.);
            ~JetsTags();
             void ReadFromEvent(const edm::Event&);
             void Branches();
