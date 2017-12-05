@@ -11,7 +11,7 @@ process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cf
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v10')
+process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v11')
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
