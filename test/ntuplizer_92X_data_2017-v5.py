@@ -13,7 +13,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v10')
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 ## TFileService
 output_file = 'ntuple.root'
@@ -34,6 +34,21 @@ process.triggerSelection = cms.EDFilter( 'TriggerResultsFilter',
     daqPartitions = cms.uint32( 1 ),
     throw = cms.bool( False )
 )
+
+# ### ============ Jet energy correctiosn update ============== (not really running!???)
+# from PhysicsTools.PatAlgos.tools.jetTools import *
+# ## Update the slimmedJets in miniAOD: corrections from the chosen Global Tag are applied and the b-tag discriminators are re-evaluated
+# updateJetCollection(
+#     process,
+#     jetSource = cms.InputTag('slimmedJets'),
+#     jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+# )
+# updateJetCollection(
+#     process,
+#     labelName = 'Puppi',
+#     jetSource = cms.InputTag('slimmedJetsPuppi'),
+#     jetCorrections = ('AK4PFPuppi', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']), 'None'),
+# )
 
 
 ## ============ EVENT FILTER COUNTER ===============
@@ -56,7 +71,7 @@ from Analysis.Ntuplizer.MssmHbbNtuplizerBtag_cfi import *
 
 ## ============  THE NTUPLIZER!!!  ===============
 process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
-    # Imported settings (either at the beginning)
+    # Imported settings (always at the beginning)
     MssmHbbNtuplizerBtag,
     MssmHbbNtuplizerTriggerPaths,
     MssmHbbNtuplizerL1Seeds,
@@ -66,9 +81,9 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
     ###################
     TotalEvents     = cms.InputTag ('TotalEvents'),
     FilteredEvents  = cms.InputTag ('FilteredEvents'),
-    PatJets         = cms.VInputTag( cms.InputTag('slimmedJets'), cms.InputTag('slimmedJetsPuppi'), ), 
-    JECRecords      = cms.vstring  (              'AK4PFchs',                  'AK4PFPuppi',        ), # for the JEC uncertainties
-    JERRecords      = cms.vstring  (              'AK4PFchs',                  'AK4PFPuppi',        ),           # for the JER
+    PatJets         = cms.VInputTag( cms.InputTag('slimmedJets'), cms.InputTag('slimmedJetsPuppi') ),
+    JECRecords      = cms.vstring  (              'AK4PFchs',                  'AK4PFPuppi', ), # for the JEC uncertainties
+    JERRecords      = cms.vstring  (              'AK4PFchs',                  'AK4PFPuppi', ), # for the JER uncertainties
     FixedGridRhoAll = cms.InputTag ('fixedGridRhoAll'),
     PatMuons        = cms.VInputTag(cms.InputTag('slimmedMuons') ), 
     PrimaryVertices = cms.VInputTag(cms.InputTag('offlineSlimmedPrimaryVertices') ),
@@ -100,6 +115,12 @@ readFiles.extend( [
 secFiles.extend( [
        ] )
 
+# ============ Output MiniAOD ======================
+# process.out = cms.OutputModule("PoolOutputModule",
+#                                fileName = cms.untracked.string('patTuple.root'),
+#                                outputCommands = cms.untracked.vstring('keep *' )
+#                                )
+# process.outpath = cms.EndPath(process.out)
 
 # ## ============ JSON Certified data ===============   BE CAREFUL!!!
 # ## Don't use with CRAB!!!
