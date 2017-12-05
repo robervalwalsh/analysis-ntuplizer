@@ -484,16 +484,24 @@ void Candidates<T>::Kinematics()
             jerSFDown_[n]     = -1;
          } 
          
-         // user floats
-         bool hasQG = false;
-         for ( auto & it : jet -> userFloatNames() )
-         { 
-            if ( it == "QGTagger:qgLikelihood" ) hasQG = true;
-         }
-         
          // quark-gluon likelihood
          qgLikelihood_[n] = -1.;
-         if ( hasQG ) qgLikelihood_[n] = jet->userFloat("QGTagger:qgLikelihood");
+         if ( jet -> hasUserFloat("QGTagger:qgLikelihood" ) )
+         {
+            qgLikelihood_[n] = jet->userFloat("QGTagger:qgLikelihood");
+         }
+         
+         // jet pileup id
+         puJetIdFullDiscr_[n] = -10.;
+         if ( jet -> hasUserFloat("pileupJetId:fullDiscriminant") )
+         {
+            puJetIdFullDiscr_[n] = jet -> userFloat("pileupJetId:fullDiscriminant");
+         }
+         puJetIdFullId_[n] = -1;
+         if ( jet -> hasUserInt("pileupJetId:fullId") )
+         {
+            puJetIdFullId_[n] = jet -> userInt("pileupJetId:fullId");
+         }
          
          
       }
@@ -792,6 +800,9 @@ void Candidates<T>::Branches()
              tree_->Branch("Rho",&rho_,"Rho/D");
 //         }
           tree_->Branch("qgLikelihood", qgLikelihood_, "qgLikelihood[n]/F");
+          tree_->Branch("puJetIdFullDiscriminant", puJetIdFullDiscr_, "puJetIdFullDiscriminant[n]/F");
+          tree_->Branch("puJetIdFullId", puJetIdFullId_, "puJetIdFullId[n]/I");
+          
          
       }
       if ( is_pfjet_ || is_patjet_ )

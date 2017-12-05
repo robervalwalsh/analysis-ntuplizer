@@ -139,6 +139,10 @@ namespace analysis {
             
             // QG Jet
             float qgLikelihood_[maxCandidates];
+            
+            // Jet pileup id
+            float puJetIdFullDiscr_[maxCandidates];
+            int   puJetIdFullId_[maxCandidates];
                         
             int pdg_[maxCandidates];
             int status_[maxCandidates];
