@@ -72,6 +72,8 @@ namespace analysis {
             void MinPt(const float& minPt = -1.);
             void MaxEta(const float& maxEta = -1.);
             void JECRecord(const std::string &);
+            void QGTaggerInstance(const std::string &);
+            void PileupJetIdInstance(const std::string &);
             static const int maxCandidates = 200;
       
          protected:
@@ -139,10 +141,12 @@ namespace analysis {
             
             // QG Jet
             float qgLikelihood_[maxCandidates];
+            std::string qgtaggerInst_;
             
             // Jet pileup id
             float puJetIdFullDiscr_[maxCandidates];
             int   puJetIdFullId_[maxCandidates];
+            std::string pujetidInst_;
                         
             int pdg_[maxCandidates];
             int status_[maxCandidates];

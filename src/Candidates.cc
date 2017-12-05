@@ -151,6 +151,10 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    
    // trigger object split
    trigobj_type_ = "";
+   
+   // pat jet user vars default
+   qgtaggerInst_ = "";
+   pujetidInst_ = "";
     
 }
 
@@ -486,21 +490,24 @@ void Candidates<T>::Kinematics()
          
          // quark-gluon likelihood
          qgLikelihood_[n] = -10.;
-         if ( jet -> hasUserFloat("QGTagger:qgLikelihood" ) )
+         std::string qgkey = qgtaggerInst_+":qgLikelihood";
+         if ( jet -> hasUserFloat(qgkey) )
          {
-            qgLikelihood_[n] = jet->userFloat("QGTagger:qgLikelihood");
+            qgLikelihood_[n] = jet->userFloat(qgkey);
          }
          
          // jet pileup id
          puJetIdFullDiscr_[n] = -10.;
-         if ( jet -> hasUserFloat("pileupJetId:fullDiscriminant") )
+         std::string pudisckey = pujetidInst_+":fullDiscriminant";
+         if ( jet -> hasUserFloat(pudisckey) )
          {
-            puJetIdFullDiscr_[n] = jet -> userFloat("pileupJetId:fullDiscriminant");
+            puJetIdFullDiscr_[n] = jet -> userFloat(pudisckey);
          }
          puJetIdFullId_[n] = -1;
-         if ( jet -> hasUserInt("pileupJetId:fullId") )
+         std::string puidkey = pujetidInst_+":fullId";
+         if ( jet -> hasUserInt(puidkey) )
          {
-            puJetIdFullId_[n] = jet -> userInt("pileupJetId:fullId");
+            puJetIdFullId_[n] = jet -> userInt(puidkey);
          }
          
          
@@ -902,6 +909,17 @@ void Candidates<T>::AddJerInfo(const std::string & jer, const std::string & res_
    jersfFile_ = sf_file;
    rho_collection_ = rho;
    
+}
+
+template <typename T>
+void Candidates<T>::QGTaggerInstance(const std::string & instance)
+{
+   qgtaggerInst_ = instance;
+}
+template <typename T>
+void Candidates<T>::PileupJetIdInstance(const std::string & instance)
+{
+   pujetidInst_ = instance;
 }
 
 // Need to declare all possible template classes here
