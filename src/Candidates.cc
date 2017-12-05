@@ -485,7 +485,7 @@ void Candidates<T>::Kinematics()
          } 
          
          // quark-gluon likelihood
-         qgLikelihood_[n] = -1.;
+         qgLikelihood_[n] = -10.;
          if ( jet -> hasUserFloat("QGTagger:qgLikelihood" ) )
          {
             qgLikelihood_[n] = jet->userFloat("QGTagger:qgLikelihood");
