@@ -109,7 +109,9 @@ void JetsTags::Tags()
       const reco::Jet * jet = candidates_.key(i).get();
       float btag = candidates_.value(i);
       
-      if ( jet -> pt() < minPt_ || fabs (jet -> eta()) > maxEta_ ) continue;
+//      if ( jet -> pt() < minPt_ || fabs (jet -> eta()) > maxEta_ ) continue;
+      if ( minPt_  >= 0. && jet -> pt()  < minPt_  ) continue;
+      if ( maxEta_ >= 0. && fabs (jet -> eta()) > maxEta_ ) continue;
       
       this->pt_[n] = jet -> pt();
       this->eta_[n]= jet -> eta();

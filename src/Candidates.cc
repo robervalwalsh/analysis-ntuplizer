@@ -151,6 +151,10 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    
    // trigger object split
    trigobj_type_ = "";
+   
+   // pat jet user vars default
+   qgtaggerInst_ = "";
+   pujetidInst_ = "";
     
 }
 
@@ -484,16 +488,27 @@ void Candidates<T>::Kinematics()
             jerSFDown_[n]     = -1;
          } 
          
-         // user floats
-         bool hasQG = false;
-         for ( auto & it : jet -> userFloatNames() )
-         { 
-            if ( it == "QGTagger:qgLikelihood" ) hasQG = true;
+         // quark-gluon likelihood
+         qgLikelihood_[n] = -10.;
+         std::string qgkey = qgtaggerInst_+":qgLikelihood";
+         if ( jet -> hasUserFloat(qgkey) )
+         {
+            qgLikelihood_[n] = jet->userFloat(qgkey);
          }
          
-         // quark-gluon likelihood
-         qgLikelihood_[n] = -1.;
-         if ( hasQG ) qgLikelihood_[n] = jet->userFloat("QGTagger:qgLikelihood");
+         // jet pileup id
+         puJetIdFullDiscr_[n] = -10.;
+         std::string pudisckey = pujetidInst_+":fullDiscriminant";
+         if ( jet -> hasUserFloat(pudisckey) )
+         {
+            puJetIdFullDiscr_[n] = jet -> userFloat(pudisckey);
+         }
+         puJetIdFullId_[n] = -1;
+         std::string puidkey = pujetidInst_+":fullId";
+         if ( jet -> hasUserInt(puidkey) )
+         {
+            puJetIdFullId_[n] = jet -> userInt(puidkey);
+         }
          
          
       }
@@ -792,6 +807,9 @@ void Candidates<T>::Branches()
              tree_->Branch("Rho",&rho_,"Rho/D");
 //         }
           tree_->Branch("qgLikelihood", qgLikelihood_, "qgLikelihood[n]/F");
+          tree_->Branch("puJetIdFullDiscriminant", puJetIdFullDiscr_, "puJetIdFullDiscriminant[n]/F");
+          tree_->Branch("puJetIdFullId", puJetIdFullId_, "puJetIdFullId[n]/I");
+          
          
       }
       if ( is_pfjet_ || is_patjet_ )
@@ -891,6 +909,17 @@ void Candidates<T>::AddJerInfo(const std::string & jer, const std::string & res_
    jersfFile_ = sf_file;
    rho_collection_ = rho;
    
+}
+
+template <typename T>
+void Candidates<T>::QGTaggerInstance(const std::string & instance)
+{
+   qgtaggerInst_ = instance;
+}
+template <typename T>
+void Candidates<T>::PileupJetIdInstance(const std::string & instance)
+{
+   pujetidInst_ = instance;
 }
 
 // Need to declare all possible template classes here
