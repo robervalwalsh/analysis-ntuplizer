@@ -16,8 +16,8 @@ P  = '\033[35m' # purple
 
 
 ARGSN = len(sys.argv)
-if ARGSN < 3:
-   print (R+"You need to provide the CMSSW python config and the samples file in this order."+W)
+if ARGSN < 4:
+   print (R+"You need to provide the CMSSW python config, the samples file and the campaign, e.g Run2017, in this order."+W)
    print (R+"Optionally you can provide the UNITS_PER_JOB (def. 500)"+W)
    sys.exit()
 
@@ -26,17 +26,16 @@ if ARGSN < 3:
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
-CAMPAIGN        = 'Run2017/92x_promptreco_v4'
 
 ARGS = sys.argv
 PSET = ARGS[1]
-SAMPLE = ARGS[2]
-if ARGSN == 4:
-   UNITS_PER_JOB = int(ARGS[3])
-   
 psetname, pset_ext = os.path.splitext(PSET)
+SAMPLE = ARGS[2]
 samplename, sample_ext = os.path.splitext(SAMPLE)
-
+CAMPAIGN        = ARGS[3] + '/' + psetname
+if ARGSN == 5:
+   UNITS_PER_JOB = int(ARGS[4])
+   
 if not ( os.path.isfile(PSET) and pset_ext == '.py' ):
    print (R+"The given python config does not exist or it is not a python file"+W)
    sys.exit()
@@ -53,14 +52,6 @@ BASEOUTDIR      = MYPATH+'Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
 dataset_list    = 'samples/data/' + PROCESS + '.txt'
 f_datasets = open(dataset_list,'r')
 datasets = f_datasets.readlines()
-
-# colors
-W  = '\033[0m'  # white (normal)
-R  = '\033[31m' # red
-G  = '\033[32m' # green
-O  = '\033[33m' # orange
-B  = '\033[34m' # blue
-P  = '\033[35m' # purple
 
 # _________________________________________________________________________
 
