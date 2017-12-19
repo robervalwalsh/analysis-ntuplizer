@@ -660,11 +660,11 @@ Ntuplizer::beginJob()
    }
    
    // split trigger objects
-   bool splitTriggerObject = false;
-   if ( do_triggerobjects_ && triggerObjectSplits_.empty() )
+   bool splitTriggerObject = config_.exists("TriggerObjectSplits");
+   if ( do_triggerobjects_ && triggerObjectSplits_.empty() && splitTriggerObject )
    {
       triggerObjectSplits_  = config_.getParameter< std::vector<std::string> >("TriggerObjectSplits");
-      if ( ! triggerObjectSplits_.empty() && triggerObjectSplitsTypes_.empty() )
+      if ( ! triggerObjectSplits_.empty() && triggerObjectSplitsTypes_.empty() && config_.exists("TriggerObjectSplitsTypes") )
       {
          triggerObjectSplitsTypes_ = config_.getParameter< std::vector<std::string> >("TriggerObjectSplitsTypes");
          for ( auto & tot : triggerObjectSplitsTypes_ ) std::transform(tot.begin(), tot.end(), tot.begin(), ::tolower);

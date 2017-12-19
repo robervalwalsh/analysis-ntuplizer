@@ -6,8 +6,8 @@ TFileService = cms.Service("TFileService",
 
 from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerPaths_cfi import *
 from Analysis.Ntuplizer.MssmHbbNtuplizerL1Seeds_cfi import *
-from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerObjects_cfi import *
 from Analysis.Ntuplizer.MssmHbbNtuplizerBtag_cfi import *
+from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerEvent_cfi import *
 
 
 ## ============  THE NTUPLIZER!!!  ===============
@@ -16,7 +16,7 @@ ntuplizer           = cms.EDAnalyzer("Ntuplizer",
     MssmHbbNtuplizerBtag,
     MssmHbbNtuplizerTriggerPaths,
     MssmHbbNtuplizerL1Seeds,
-    MssmHbbNtuplizerTriggerObjects,
+    MssmHbbNtuplizerTriggerEvent,
     MonteCarlo      = cms.bool(False),
     ## Monte Carlo only
 #     GenFilterInfo   = cms.InputTag("genFilterEfficiencyProducer"),
@@ -33,5 +33,5 @@ ntuplizer           = cms.EDAnalyzer("Ntuplizer",
     TriggerResults  = cms.VInputTag(cms.InputTag('TriggerResults','','HLT') ),
     L1TJets         = cms.VInputTag(cms.InputTag('caloStage2Digis','Jet','RECO'), ),
     L1TMuons        = cms.VInputTag(cms.InputTag('gmtStage2Digis','Muon','RECO'), ),
-    TriggerObjectStandAlone = cms.VInputTag(cms.InputTag('slimmedPatTrigger'), ),
+    TriggerEvent    = cms.VInputTag(cms.InputTag('hltTriggerSummaryAOD','','HLT'), ),
 )
