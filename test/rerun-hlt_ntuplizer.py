@@ -84,7 +84,36 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_HLT_v7', 'L1Menu_
 from Analysis.Ntuplizer.TriggerFilter_cfi import triggerFilter
 process.triggerFilter = triggerFilter
 process.triggerFilter.hltResults = cms.InputTag( "TriggerResults", "", "HLT2" )
-process.triggerFilter.triggerConditions = cms.vstring('HLT_ZeroBias_v*','HLT_PFJet40_v*','HLT_Mu8_v*')
+process.triggerFilter.triggerConditions = cms.vstring(
+                   'HLT_ZeroBias_v*',
+                   'HLT_Mu12_DoublePFJets40_CaloBTagCSV_p33_v*',
+                   'HLT_Mu12_DoublePFJets40_CaloBTagCSV0p80_px_v*',
+                   'HLT_Mu12_DoublePFJets40_CaloBTagCSV0p84_px_v*',
+                   'HLT_Mu12_DoublePFJets40_CaloBTagCSV0p88_px_v*',
+                   'HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTagCSV_p33_v*',
+                   'HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTagCSV0p80_px_v*',
+                   'HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTagCSV0p84_px_v*',
+                   'HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTagCSV0p88_px_v*',
+                   'HLT_DoublePFJets40_CaloBTagCSV_p33_v*',
+                   'HLT_DoublePFJets40_CaloBTagCSV0p80_px_v*',
+                   'HLT_DoublePFJets40_CaloBTagCSV0p84_px_v*',
+                   'HLT_DoublePFJets40_CaloBTagCSV0p88_px_v*',
+                   'HLT_DoublePFJets100_CaloBTagCSV_p33_v*',
+                   'HLT_DoublePFJets100_CaloBTagCSV0p80_px_v*',
+                   'HLT_DoublePFJets100_CaloBTagCSV0p84_px_v*',
+                   'HLT_DoublePFJets100_CaloBTagCSV0p88_px_v*',
+                   'HLT_DoublePFJets100MaxDeta1p6_DoubleCaloBTagCSV_p33_v*',
+                   'HLT_DoublePFJets100MaxDeta1p6_DoubleCaloBTagCSV0p80_px_v*',
+                   'HLT_DoublePFJets100MaxDeta1p6_DoubleCaloBTagCSV0p84_px_v*',
+                   'HLT_DoublePFJets100MaxDeta1p6_DoubleCaloBTagCSV0p88_px_v*',
+                   'HLT_SingleJet30_Mu12_SinglePFJet40_v*',
+                   'HLT_PFJet40_v*',
+                   'HLT_Mu8_v*',
+                   'HLT_Mu3_PFJet40_v*',
+                   'HLT_DoublePFJets40_v*',
+                   'HLT_Mu12_v*',
+                   'HLT_Mu12_PFJet40_v*',
+)
 
 ## ============ EVENT FILTER COUNTER ===============
 ## Filter counter (maybe more useful for MC)
@@ -103,12 +132,11 @@ process.primaryVertexFilter = cms.EDFilter('VertexSelector',
 process.L1RePack_step = cms.Path(process.SimL1Emulator)
 process.endjob_step = cms.EndPath(process.endOfProcess)
 
-from Analysis.Ntuplizer.Ntuplizer_cfi import TFileService
+from Analysis.Ntuplizer.NtuplizerHLT_cfi import TFileService
 process.TFileService = TFileService
 from Analysis.Ntuplizer.NtuplizerHLT_cfi import ntuplizer
 process.MssmHbb = ntuplizer
 process.MssmHbb.TriggerResults  = cms.VInputTag(cms.InputTag('TriggerResults','','HLT2') )
-process.MssmHbb.TriggerPaths    = cms.vstring  ('HLT_ZeroBias_v','HLT_PFJet40_v','HLT_Mu8_v')
 process.MssmHbb.TriggerEvent    = cms.VInputTag(cms.InputTag('hltTriggerSummaryAOD','','HLT2'), )
 
 process.Ntuplizer = cms.Sequence(process.TotalEvents + process.triggerFilter + process.FilteredEvents + process.MssmHbb )
