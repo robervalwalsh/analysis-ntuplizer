@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-MssmHbbNtuplizerTriggerEvent = cms.PSet(
+MssmHbbNtuplizerTriggerEventHLT = cms.PSet(
    TriggerObjectLabels    = cms.vstring  (
                                              
                                            'hltL1sZeroBias',

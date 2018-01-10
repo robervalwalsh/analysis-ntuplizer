@@ -4,19 +4,19 @@ TFileService = cms.Service("TFileService",
 	fileName = cms.string('ntuple.root')
 )
 
-from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerPaths_cfi import *
-from Analysis.Ntuplizer.MssmHbbNtuplizerL1Seeds_cfi import *
-from Analysis.Ntuplizer.MssmHbbNtuplizerBtag_cfi import *
-from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerEvent_cfi import *
+from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerPathsHLT_cfi import *
+from Analysis.Ntuplizer.MssmHbbNtuplizerL1SeedsHLT_cfi import *
+from Analysis.Ntuplizer.MssmHbbNtuplizerBtagHLT_cfi import *
+from Analysis.Ntuplizer.MssmHbbNtuplizerTriggerEventHLT_cfi import *
 
 
 ## ============  THE NTUPLIZER!!!  ===============
 ntuplizer           = cms.EDAnalyzer("Ntuplizer",
     # Imported settings (always at the beginning)
-    MssmHbbNtuplizerBtag,
-    MssmHbbNtuplizerTriggerPaths,
-    MssmHbbNtuplizerL1Seeds,
-    MssmHbbNtuplizerTriggerEvent,
+    MssmHbbNtuplizerBtagHLT,
+    MssmHbbNtuplizerTriggerPathsHLT,
+    MssmHbbNtuplizerL1SeedsHLT,
+    MssmHbbNtuplizerTriggerEventHLT,
     MonteCarlo      = cms.bool(False),
     ## Monte Carlo only
 #     GenFilterInfo   = cms.InputTag("genFilterEfficiencyProducer"),

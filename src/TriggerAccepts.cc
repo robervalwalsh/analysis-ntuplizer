@@ -93,7 +93,7 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
    Handle<TriggerResults> handler;
    event.getByLabel(input_collection_, handler);
    const TriggerResults & triggers = *(handler.product());
-   
+      
    // l1 accept
    for ( size_t j = 0 ; j < hlt_config_.size() ; ++j )
    {
@@ -103,6 +103,7 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
          {
             // trigger accepted?
             accept_[i] = triggers.accept(j);
+            
             // get prescale info if requested
             if ( psinfo_ )
             {
@@ -124,9 +125,26 @@ void TriggerAccepts::Fill(const edm::Event& event, const edm::EventSetup & setup
                   }
                }
             }
+            else
+            {
+               std::vector<std::string> l1seeds = hlt_config_.hltL1TSeeds(hlt_config_.triggerName(j));
+               for ( size_t l = 0; l < seeds_.size(); ++l ) // loop over seeds passed by python config
+               {
+                  for ( auto & l1 : l1seeds )
+                  {
+                     if ( l1.find(seeds_[l]) == 0 && ! l1done[seeds_[l]] )
+                     {
+                        hlt_prescale_->l1tGlobalUtil().getFinalDecisionByName (seeds_[l], l1accept_[l]);
+                        l1done[seeds_[l]] = true;
+                        break;
+                     }
+                  }
+               }
+            }
          }
       }
    }
+   
    tree_ -> Fill();
    
 }
