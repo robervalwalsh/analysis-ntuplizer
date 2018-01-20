@@ -109,14 +109,23 @@ namespace analysis {
             bool isTrackerMuon_[maxCandidates];
             bool isLooseMuon_[maxCandidates];
             bool isMediumMuon_[maxCandidates];
-            
+            bool isTightMuon_[maxCandidates];
+
+	    // Muon chamber stations
+ 	    float segmentCompatibility_[maxCandidates];
+ 	    float matchedStations_[maxCandidates];
+
             // Inner tracker vars                                                                                                                                                                   
             float validFraction_[maxCandidates];
-            float segmentCompatibility_[maxCandidates];
+     	    float validPixelHits_[maxCandidates];
+ 	    float trkLayersWithMeasurement_[maxCandidates];
+ 	    float ipxy_[maxCandidates];
+ 	    float ipz_[maxCandidates];
+
+            // Global tracker vars        
             float trkKink_[maxCandidates];
             float chi2LocalPos_[maxCandidates];
-
-            // Global tracker vars                                                                                                                                                                   
+	    float validMuonHits_[maxCandidates];                                                                                 
             float normChi2_[maxCandidates];
 
             // pat jet additional vars
