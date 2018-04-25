@@ -24,7 +24,7 @@ if ARGSN < 3:
 
 # ---
 # Some parameter steering
-UNITS_PER_JOB   = 2
+UNITS_PER_JOB   = 200
 TYPE            = 'MC'
 CAMPAIGN        = 'Moriond17/80x_moriond17_data03Feb2017_v1'
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
    config.Data.unitsPerJob  = UNITS_PER_JOB
    config.Data.totalUnits   = -1
    config.Data.outLFNDirBase   = BASEOUTDIR + '/'
-#   config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader/'
+   config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSReader/'
 #   config.Data.allowNonValidInputDataset = True    # If dataset not valid yet, will run over valid files only
 
 # ====== JOBTYPE
@@ -85,6 +85,8 @@ if __name__ == '__main__':
 
    for dataset in datasets:
       dataset=dataset.replace(" ", "")
+      if dataset[0] == '#':
+         continue
       cross_section = 1.
       if len(dataset.split(',')) > 1:
          cross_section = dataset.split(',')[1].split('\n')[0]
@@ -96,7 +98,6 @@ if __name__ == '__main__':
       dataset_cond = dataset.split('/')[2]
       dataset_tier = dataset.split('/')[3]
        
-       
       
 #      
       config.Data.inputDataset     = dataset
@@ -104,10 +105,10 @@ if __name__ == '__main__':
 #      
       config.General.requestName  = dataset_name
 # use if needed in private productions (modify accordingly)
-#      processname = dataset_cond.split('_')
-#      config.General.requestName  += '_'+processname[0]+'-'+processname[1]+'_oldGT'
-#      print config.General.requestName 
-#     
+      processname = dataset_cond.split('_')
+      config.General.requestName  += '_'+processname[0]+'-'+processname[1]
+      print config.General.requestName 
+    
       process.MssmHbb.CrossSection = cms.double(cross_section)
       psettmp = pset+'_tmp.py'
       f = open(psettmp, 'w')
@@ -118,7 +119,7 @@ if __name__ == '__main__':
 #
       outtext = "Submitting dataset " + dataset + "..."
       print (O+str(outtext)+W) 
-#      crabCommand('submit', config = config)
+      crabCommand('submit', config = config)
       print (O+"--------------------------------"+W)
       print
 #
