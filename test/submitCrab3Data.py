@@ -7,11 +7,13 @@ from WMCore.Configuration import Configuration
 
 # ---
 # Some parameter steering
-PROCESS         = 'BTagCSV_2016H_03Feb2017'
+PDATA           = 'JetHT'
+PERIOD          = 'H'
+PROCESS         = PDATA+'_2016'+PERIOD+'_03Feb2017'
+PSET            = 'ntuplizer_data_80X_moriond17_'+PERIOD+'.py'
 RUN_RANGE       = ''
 UNITS_PER_JOB   = 500
 TYPE            = 'DATA'
-PSET            = 'ntuplizer_data_80X_moriond17_H.py'
 CAMPAIGN        = 'Run2016/80x_moriond17_reminiaod_03Feb2017_v1'
 BASEOUTDIR      = '/store/user/rwalsh/Analysis/Ntuples/' + TYPE + '/' + CAMPAIGN
 

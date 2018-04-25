@@ -10,7 +10,7 @@ from WMCore.Configuration import Configuration
 
 # ---
 # Some parameter steering
-PROCESS         = 'TTbar'
+PROCESS         = 'QCD_pythia8_80to120'
 UNITS_PER_JOB   = 2
 TYPE            = 'MC'
 PSET            = 'ntuplizer_mc_80X_moriond17.py'
@@ -44,7 +44,7 @@ if __name__ == '__main__':
    config = crabConfig()
 
 # ====== GENERAL
-#   config.General.workArea += '_' + PROCESS
+   config.General.workArea += '_' + PROCESS
    
 # ====== DATA   
    config.Data.splitting   = 'FileBased'
