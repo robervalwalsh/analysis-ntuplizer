@@ -3,34 +3,34 @@ import FWCore.ParameterSet.Config as cms
 MssmHbbTriggerResultsFilter = cms.PSet(
     triggerConditions = cms.vstring(
 # physics triggers
-                                     'HLT_DoublePFJets116MaxDeta1p6_DoubleCaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTagCSV_p79_v*',
+                                     'HLT_DoublePFJets116MaxDeta1p6_DoubleCaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTag*CSV_p*_v*',
 # backup triggers                                     
-                                     'HLT_DoublePFJets128MaxDeta1p6_DoubleCaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets54MaxDeta1p6_DoubleCaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets62MaxDeta1p6_DoubleCaloBTagCSV_p79_v*',
+                                     'HLT_DoublePFJets128MaxDeta1p6_DoubleCaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets54MaxDeta1p6_DoubleCaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets62MaxDeta1p6_DoubleCaloBTag*CSV_p*_v*',
                                      
 # addictional triggers
                                      'HLT_AK8PFJet360_TrimMass30_v*',
                                      'HLT_AK8PFJet380_TrimMass30_v*',
                                      'HLT_AK8PFJet400_TrimMass30_v*',
                                      'HLT_AK8PFJet420_TrimMass30_v*',
-                                     'HLT_AK8PFJet330_TrimMass30_PFAK8BTagCSV_p17_v*',
-                                     'HLT_AK8PFJet330_TrimMass30_PFAK8BTagCSV_p1_v*',
+                                     'HLT_AK8PFJet330_TrimMass30_PFAK8BTag*CSV_p17_v*',
+                                     'HLT_AK8PFJet330_TrimMass30_PFAK8BTag*CSV_p1_v*',
                                      'HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_p02_v*',
 
 
 # control triggers
 ### btag                             
                                      'HLT_SingleJet30_Mu12_SinglePFJet40_v*', 
-                                     'HLT_DoublePFJets40_CaloBTagCSV_p79_v*', 
-                                     'HLT_DoublePFJets100_CaloBTagCSV_p79_v*', 
-                                     'HLT_DoublePFJets200_CaloBTagCSV_p79_v*', 
-                                     'HLT_DoublePFJets350_CaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets40_CaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets100_CaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets200_CaloBTagCSV_p79_v*', 
-                                     'HLT_Mu12_DoublePFJets350_CaloBTagCSV_p79_v*',
+                                     'HLT_DoublePFJets40_CaloBTag*CSV_p*_v*', 
+                                     'HLT_DoublePFJets100_CaloBTag*CSV_p*_v*', 
+                                     'HLT_DoublePFJets200_CaloBTag*CSV_p*_v*', 
+                                     'HLT_DoublePFJets350_CaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets40_CaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets100_CaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets200_CaloBTag*CSV_p*_v*', 
+                                     'HLT_Mu12_DoublePFJets350_CaloBTag*CSV_p*_v*',
 ### jet triggers
                                      'HLT_PFJet40_v*', 
                                      'HLT_PFJet60_v*', 

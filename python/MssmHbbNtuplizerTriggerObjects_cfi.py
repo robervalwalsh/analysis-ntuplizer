@@ -5,13 +5,28 @@ import FWCore.ParameterSet.Config as cms
 MssmHbbNtuplizerTriggerObjects = cms.PSet(
    TriggerObjectLabels    = ( cms.vstring  (  
 # physics triggers
-# HLT_DoublePFJets116MaxDeta1p6_DoubleCaloBTagCSV_p79_v
+# HLT_DoublePFJets116MaxDeta1p6_DoubleCaloBTag*CSV_p*_v
+                                             'hltL1DoubleJet112er2p3dEtaMax1p6',
+                                             'hltDoubleCaloBJets100eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Double6Jets80',
+                                             'hltDoublePFJets116Eta2p3',
+                                             'hltDoublePFJets116Eta2p3MaxDeta1p6',
+                                             # csvv2
                                              'hltL1DoubleJet112er2p3dEtaMax1p6',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp79DoubleWithMatching',
                                              'hltDoublePFJets116Eta2p3',
                                              'hltDoublePFJets116Eta2p3MaxDeta1p6',
-# HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTagCSV_p79_v                                             
+# HLT_Mu12_DoublePFJets40MaxDeta1p6_DoubleCaloBTag*CSV_p*_v   
+                                             'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',
+                                             'hltL1fL1sMu12Dijet40L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Double8Jets30',
+                                             'hltL3fL1sMu12Dijet40L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets40Eta2p3',
+                                             'hltDoublePFJets40Eta2p3MaxDeta1p6',
+                                             'hltBSoftMuonDiJet40Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',
                                              'hltL1fL1sMu12Dijet40L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
@@ -21,13 +36,28 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltDoublePFJets40Eta2p3MaxDeta1p6',
                                              'hltBSoftMuonDiJet40Mu12L3FilterByDR',
 # backup triggers                                     
-# HLT_DoublePFJets128MaxDeta1p6_DoubleCaloBTagCSV_p79_v
+# HLT_DoublePFJets128MaxDeta1p6_DoubleCaloBTag*CSV_p*_v
+                                             'hltL1DoubleJet112er2p3dEtaMax1p6',
+                                             'hltDoubleCaloBJets100eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Double6Jets80',
+                                             'hltDoublePFJets128Eta2p3',
+                                             'hltDoublePFJets128Eta2p3MaxDeta1p6',
+                                             # csvv2
                                              'hltL1DoubleJet112er2p3dEtaMax1p6',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp79DoubleWithMatching',
                                              'hltDoublePFJets128Eta2p3',
-                                             'hltDoublePFJets128Eta2p3MaxDeta1p6',
-# HLT_Mu12_DoublePFJets54MaxDeta1p6_DoubleCaloBTagCSV_p79_v
+                                             'hltDoublePFJets128Eta2p3MaxDeta1p6',                                             
+# HLT_Mu12_DoublePFJets54MaxDeta1p6_DoubleCaloBTag*CSV_p*_v
+                                             'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',
+                                             'hltL1fL1sMu12Dijet40L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Double8Jets30',
+                                             'hltL3fL1sMu12Dijet40L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets54Eta2p3',
+                                             'hltDoublePFJets54Eta2p3MaxDeta1p6',
+                                             'hltBSoftMuonDiJet54Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',
                                              'hltL1fL1sMu12Dijet40L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
@@ -36,7 +66,16 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltDoublePFBJets54Eta2p3',
                                              'hltDoublePFJets54Eta2p3MaxDeta1p6',
                                              'hltBSoftMuonDiJet54Mu12L3FilterByDR',
-# HLT_Mu12_DoublePFJets62MaxDeta1p6_DoubleCaloBTagCSV_p79_v                                             
+# HLT_Mu12_DoublePFJets62MaxDeta1p6_DoubleCaloBTag*CSV_p*_v
+                                             'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',
+                                             'hltL1fL1sMu12Dijet40L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Double8Jets30',
+                                             'hltL3fL1sMu12Dijet40L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets62Eta2p3',
+                                             'hltDoublePFJets62Eta2p3MaxDeta1p6',
+                                             'hltBSoftMuonDiJet62Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',
                                              'hltL1fL1sMu12Dijet40L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
@@ -66,14 +105,28 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltAK8SingleCaloJet320',
                                              'hltAK8SinglePFJet420',
                                              'hltAK8SinglePFJetTrimModMass30',
-# HLT_AK8PFJet330_TrimMass30_PFAK8BTagCSV_p17_v                                             
+# HLT_AK8PFJet330_TrimMass30_PFAK8BTag*CSV_p17_v
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltAK8SingleCaloJet300',
+                                             'hltSinglePFJet330AK8',
+                                             'hltAK8SinglePFJetTrimModMass30',
+                                             'hltPFJetForBtagSelectorAK8',
+                                             'hltBTagAK8PFDeepCSV16p1Single',
+                                             # csvv2
                                              'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
                                              'hltAK8SingleCaloJet300',
                                              'hltSinglePFJet330AK8',
                                              'hltAK8SinglePFJetTrimModMass30',
                                              'hltPFJetForBtagSelectorAK8',
                                              'hltBTagPFCSVp3Single',
-# HLT_AK8PFJet330_TrimMass30_PFAK8BTagCSV_p1_v                                             
+# HLT_AK8PFJet330_TrimMass30_PFAK8BTag*CSV_p1_v
+                                             'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
+                                             'hltAK8SingleCaloJet300',
+                                             'hltSinglePFJet330AK8',
+                                             'hltAK8SinglePFJetTrimModMass30',
+                                             'hltPFJetForBtagSelectorAK8',
+                                             'hltBTagAK8PFDeepCSV10p3Single',
+                                             # csvv2
                                              'hltL1sSingleJet170IorSingleJet180IorSingleJet200',
                                              'hltAK8SingleCaloJet300',
                                              'hltSinglePFJet330AK8',
@@ -96,27 +149,55 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltL3fL1sMu3Jet16L1f0L2f8L3Filtered12',
                                              'hltSinglePFBJets40Eta2p3',
                                              'hltBSoftMuonJet40Mu12L3FilterByDR',
-# HLT_DoublePFJets40_CaloBTagCSV_p79_v                                             
+# HLT_DoublePFJets40_CaloBTag*CSV_p*_v         
+                                             'hltL1DoubleJet40er3p0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single8Jets30',
+                                             'hltDoublePFJets40Eta2p3',
+                                             # csvv2
                                              'hltL1DoubleJet40er3p0',
                                              'hltDoubleCaloBJets30eta2p3',
                                              'hltBTagCalo30x8CSVp79SingleWithMatching',
                                              'hltDoublePFJets40Eta2p3',
-# HLT_DoublePFJets100_CaloBTagCSV_p79_v                                             
+# HLT_DoublePFJets100_CaloBTag*CSV_p*_v                        
+                                             'hltL1DoubleJet100er3p0',
+                                             'hltDoubleCaloBJets100eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single6Jets80',
+                                             'hltDoublePFJets100Eta2p3',
+                                             # csvv2
                                              'hltL1DoubleJet100er3p0',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp79SingleWithMatching',
                                              'hltDoublePFJets100Eta2p3',                                            
-# HLT_DoublePFJets200_CaloBTagCSV_p79_v
+# HLT_DoublePFJets200_CaloBTag*CSV_p*_v
+                                             'hltL1DoubleJet120er3p0',
+                                             'hltDoubleCaloBJets100eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single6Jets80',
+                                             'hltDoublePFJets200Eta2p3',
+                                             # csvv2
                                              'hltL1DoubleJet120er3p0',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp79SingleWithMatching',
                                              'hltDoublePFJets200Eta2p3',
-# HLT_DoublePFJets350_CaloBTagCSV_p79_v                                             
+# HLT_DoublePFJets350_CaloBTag*CSV_p*_v     
+                                             'hltL1DoubleJet120er3p0',
+                                             'hltDoubleCaloBJets100eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single6Jets80',
+                                             'hltDoublePFJets350Eta2p3',
+                                             # csvv2
                                              'hltL1DoubleJet120er3p0',
                                              'hltDoubleCaloBJets100eta2p3',
                                              'hltBTagCalo80x6CSVp79SingleWithMatching',
                                              'hltDoublePFJets350Eta2p3',
-# HLT_Mu12_DoublePFJets40_CaloBTagCSV_p79_v
+# HLT_Mu12_DoublePFJets40_CaloBTag*CSV_p*_v
+                                             'hltL1sMu3JetC16dEtaMax0p4dPhiMax0p4',
+                                             'hltL1fL1sMu3Jet16L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single8Jets30',
+                                             'hltL3fL1sMu3Jet16L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets40Eta2p3',
+                                             'hltBSoftMuonDiJet40Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1sMu3JetC16dEtaMax0p4dPhiMax0p4',
                                              'hltL1fL1sMu3Jet16L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
@@ -124,7 +205,15 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltL3fL1sMu3Jet16L1f0L2f8L3Filtered12',
                                              'hltDoublePFBJets40Eta2p3',
                                              'hltBSoftMuonDiJet40Mu12L3FilterByDR',
-# HLT_Mu12_DoublePFJets100_CaloBTagCSV_p79_v
+# HLT_Mu12_DoublePFJets100_CaloBTag*CSV_p*_v
+                                             'hltL1sMu3JetC60dEtaMax0p4dPhiMax0p4',
+                                             'hltL1fL1sMu3Jet60L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single8Jets30',
+                                             'hltL3fL1sMu3Jet60L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets100Eta2p3',
+                                             'hltBSoftMuonDiJet100Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1sMu3JetC60dEtaMax0p4dPhiMax0p4',
                                              'hltL1fL1sMu3Jet60L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
@@ -132,7 +221,15 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltL3fL1sMu3Jet60L1f0L2f8L3Filtered12',
                                              'hltDoublePFBJets100Eta2p3',
                                              'hltBSoftMuonDiJet100Mu12L3FilterByDR',
-# HLT_Mu12_DoublePFJets200_CaloBTagCSV_p79_v
+# HLT_Mu12_DoublePFJets200_CaloBTag*CSV_p*_v
+                                             'hltL1sMu3JetC120dEtaMax0p4dPhiMax0p4',
+                                             'hltL1fL1sMu3Jet120L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single8Jets30',
+                                             'hltL3fL1sMu3Jet120L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets200Eta2p3',
+                                             'hltBSoftMuonDiJet200Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1sMu3JetC120dEtaMax0p4dPhiMax0p4',
                                              'hltL1fL1sMu3Jet120L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
@@ -140,7 +237,15 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltL3fL1sMu3Jet120L1f0L2f8L3Filtered12',
                                              'hltDoublePFBJets200Eta2p3',
                                              'hltBSoftMuonDiJet200Mu12L3FilterByDR',
-# HLT_Mu12_DoublePFJets350_CaloBTagCSV_p79_v
+# HLT_Mu12_DoublePFJets350_CaloBTag*CSV_p*_v
+                                             'hltL1sMu3JetC120dEtaMax0p4dPhiMax0p4',
+                                             'hltL1fL1sMu3Jet120L1Filtered0',
+                                             'hltDoubleCaloBJets30eta2p3',
+                                             'hltBTagCaloDeepCSV0p71Single8Jets30',
+                                             'hltL3fL1sMu3Jet120L1f0L2f8L3Filtered12',
+                                             'hltDoublePFBJets350Eta2p3',
+                                             'hltBSoftMuonDiJet350Mu12L3FilterByDR',
+                                             # csvv2
                                              'hltL1sMu3JetC120dEtaMax0p4dPhiMax0p4',
                                              'hltL1fL1sMu3Jet120L1Filtered0',
                                              'hltDoubleCaloBJets30eta2p3',
