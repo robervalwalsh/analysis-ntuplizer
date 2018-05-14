@@ -134,6 +134,7 @@ secFiles = cms.untracked.vstring()
 process.source = cms.Source ('PoolSource',fileNames = readFiles, secondaryFileNames = secFiles)
 readFiles.extend( [
    '/store/data/Run2018A/JetHT/MINIAOD/PromptReco-v1/000/315/257/00000/684ACF2A-5F4B-E811-AC83-02163E01A002.root',
+   '/store/data/Run2018A/JetHT/MINIAOD/PromptReco-v1/000/315/974/00000/DA0A327E-B255-E811-968E-FA163E0B2F4D.root',
 ] );
 
 
@@ -147,11 +148,11 @@ secFiles.extend( [
 #                                )
 # process.outpath = cms.EndPath(process.out)
 
-## ============ JSON Certified data ===============   BE CAREFUL!!!
-## Don't use with CRAB!!!
+# ## ============ JSON Certified data ===============   BE CAREFUL!!!
+# ## Don't use with CRAB!!!
 # import FWCore.PythonUtilities.LumiList as LumiList
 # import FWCore.ParameterSet.Types as CfgTypes
 # process.source.lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
-# JSONfile = 'json.txt'
+# JSONfile = 'json_DCSONLY.txt'
 # myLumis = LumiList.LumiList(filename = JSONfile).getCMSSWString().split(',')
 # process.source.lumisToProcess.extend(myLumis)
