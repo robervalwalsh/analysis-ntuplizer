@@ -251,6 +251,22 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltL1fL1sMu22or25L1Filtered0',
                                              'hltL3fL1sMu22Or25L1f0L2f10QL3Filtered55Q',
                                              
+                                             'hltL1sSingleMu10LowQ',
+                                             'hltL1fL1sMu10lqL1Filtered0',
+                                             'hltL3fL1sMu10lqL1f0L2f10L3Filtered17',
+                                             
+                                             'hltL1sSingleMu10LowQ',
+                                             'hltL1fL1sMu10lqL1Filtered0',
+                                             'hltL3fL1sMu10lqL1f0L2f10L3Filtered19',
+                                             
+                                             'hltL1sSingleMu18',
+                                             'hltL1fL1sMu18L1Filtered0',
+                                             'hltL3fL1sMu18L1f0L2f10QL3Filtered20Q',
+                                             
+                                             'hltL1sSingleMu22or25',
+                                             'hltL1fL1sMu22or25L1Filtered0',
+                                             'hltL3fL1sMu22Or25L1f0L2f10QL3Filtered27Q',
+                                             
    ) ),
    TriggerObjectSplits         = cms.vstring  (
                                              'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',

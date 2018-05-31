@@ -55,6 +55,10 @@ MssmHbbNtuplizerTriggerPaths = cms.PSet(
 
 ### muon triggers
                                      'HLT_Mu8_v', 
+                                     'HLT_Mu17_v',
+                                     'HLT_Mu19_v',
+                                     'HLT_Mu20_v',
+                                     'HLT_Mu27_v',
                                      'HLT_Mu50_v',
                                      'HLT_Mu55_v',
                                      'HLT_Mu3_PFJet40_v', 
