@@ -146,13 +146,13 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    // definitions
    // jetid
    id_vars_.clear();
-   id_vars_.push_back({"neutralHadronEnergyFraction", "id_nHadFrac"});
-   id_vars_.push_back({"neutralEmEnergyFraction",     "id_nEmFrac" });
-   id_vars_.push_back({"neutralMultiplicity",         "id_nMult"   });
-   id_vars_.push_back({"chargedHadronEnergyFraction", "id_cHadFrac"});
-   id_vars_.push_back({"chargedEmEnergyFraction",     "id_cEmFrac" });
-   id_vars_.push_back({"chargedMultiplicity",         "id_cMult"   });
-   id_vars_.push_back({"muonEnergyFraction",          "id_muonFrac"});
+   id_vars_.push_back({"neutralHadronEnergyFraction", "id_nHadFrac" });
+   id_vars_.push_back({"neutralEmEnergyFraction",     "id_nEmFrac"  });
+   id_vars_.push_back({"neutralMultiplicity",         "id_nMult"    });
+   id_vars_.push_back({"chargedHadronEnergyFraction", "id_cHadFrac" });
+   id_vars_.push_back({"chargedEmEnergyFraction",     "id_cEmFrac"  });
+   id_vars_.push_back({"chargedMultiplicity",         "id_cMult"    });
+   id_vars_.push_back({"muonEnergyFraction",          "id_muonFrac" });
    
    // init
    btag_vars_.clear();
@@ -460,10 +460,24 @@ void Candidates<T>::Kinematics()
          {
             jetid_[0][n] = jet->neutralHadronEnergyFraction();
             jetid_[1][n] = jet->neutralEmEnergyFraction();
-            jetid_[2][n] = (float)jet->neutralMultiplicity();
+            if ( jet->hasUserFloat("patPuppiJetSpecificProducer:neutralPuppiMultiplicity") )
+            {
+               jetid_[2][n] = jet->userFloat("patPuppiJetSpecificProducer:neutralPuppiMultiplicity");
+            }
+            else
+            {
+               jetid_[2][n] = (float)jet->neutralMultiplicity();
+            }
             jetid_[3][n] = jet->chargedHadronEnergyFraction();
             jetid_[4][n] = jet->chargedEmEnergyFraction();
-            jetid_[5][n] = (float)jet->chargedMultiplicity();
+            if ( jet->hasUserFloat("patPuppiJetSpecificProducer:neutralPuppiMultiplicity") && jet->hasUserFloat("patPuppiJetSpecificProducer:puppiMultiplicity") )
+            {
+               jetid_[5][n] = jet->userFloat("patPuppiJetSpecificProducer:puppiMultiplicity") - jet->userFloat("patPuppiJetSpecificProducer:neutralPuppiMultiplicity");
+            }
+            else
+            {
+               jetid_[5][n] = (float)jet->chargedMultiplicity();
+            }
             jetid_[6][n] = jet->muonEnergyFraction();
          }
          else  // set some dummy values
