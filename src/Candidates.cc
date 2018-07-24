@@ -153,6 +153,7 @@ Candidates<T>::Candidates(const edm::InputTag& tag, TTree* tree, const bool & mc
    id_vars_.push_back({"chargedEmEnergyFraction",     "id_cEmFrac"  });
    id_vars_.push_back({"chargedMultiplicity",         "id_cMult"    });
    id_vars_.push_back({"muonEnergyFraction",          "id_muonFrac" });
+   id_vars_.push_back({"puppiJetsSpecific",           "id_puppi"    });
    
    // init
    btag_vars_.clear();
@@ -473,10 +474,12 @@ void Candidates<T>::Kinematics()
             if ( jet->hasUserFloat("patPuppiJetSpecificProducer:neutralPuppiMultiplicity") && jet->hasUserFloat("patPuppiJetSpecificProducer:puppiMultiplicity") )
             {
                jetid_[5][n] = jet->userFloat("patPuppiJetSpecificProducer:puppiMultiplicity") - jet->userFloat("patPuppiJetSpecificProducer:neutralPuppiMultiplicity");
+               jetid_[7][n] = 1.;
             }
             else
             {
                jetid_[5][n] = (float)jet->chargedMultiplicity();
+               jetid_[7][n] = -1.;
             }
             jetid_[6][n] = jet->muonEnergyFraction();
          }
