@@ -989,24 +989,23 @@ void Candidates<T>::Branches()
          trkqualities[9] = "qualitySize";
          for ( int it = 0 ; it < 10 ; ++it )
             tree_->Branch(Form("quality_%s",trkqualities[it].c_str()), trkqual_[it],Form("quality_%s[n]/O",trkqualities[it].c_str()));
+      
+         // hit pattern
+         tree_->Branch("numberOfLostMuonHits" ,trkhp_lostmu_, "numberOfLostMuonHits[n]/I");
+         tree_->Branch("numberOfValidMuonHits",trkhp_valmu_ , "numberOfValidMuonHits[n]/I");
+         tree_->Branch("numberOfBadMuonHits",  trkhp_badmu_ , "numberOfBadMuonHits[n]/I");
+         
+         tree_->Branch("numberOfValidTrackerHits" ,trkhp_valtrkhits_,"numberOfValidTrackerHits[n]/I");
+         tree_->Branch("numberOfValidStripTECHits",trkhp_valtechits_,"numberOfValidStripTECHits[n]/I");
+         tree_->Branch("numberOfValidStripTIBHits",trkhp_valtibhits_,"numberOfValidStripTIBHits[n]/I");
+         tree_->Branch("numberOfValidStripTIDHits",trkhp_valtidhits_,"numberOfValidStripTIDHits[n]/I");
+         tree_->Branch("numberOfValidStripTOBHits",trkhp_valtobhits_,"numberOfValidStripTOBHits[n]/I");
+         
+         tree_->Branch("muonStationsWithValidHits" ,        trkhp_stationsvalhits_     ,"muonStationsWithValidHits[n]/I");
+         tree_->Branch("muonStationsWithBadHits" ,          trkhp_stationsbadhits_     ,"muonStationsWithBadHits[n]/I");
+         tree_->Branch("innermostMuonStationWithValidHits" ,trkhp_innerstationsvalhits_,"innermostMuonStationWithValidHits[n]/I");
+         tree_->Branch("outermostMuonStationWithValidHits" ,trkhp_outerstationsvalhits_,"outermostMuonStationWithValidHits[n]/I");
       }
-      
-      // hit pattern
-      tree_->Branch("numberOfLostMuonHits" ,trkhp_lostmu_, "numberOfLostMuonHits[n]/I");
-      tree_->Branch("numberOfValidMuonHits",trkhp_valmu_ , "numberOfValidMuonHits[n]/I");
-      tree_->Branch("numberOfBadMuonHits",  trkhp_badmu_ , "numberOfBadMuonHits[n]/I");
-      
-      tree_->Branch("numberOfValidTrackerHits" ,trkhp_valtrkhits_,"numberOfValidTrackerHits[n]/I");
-      tree_->Branch("numberOfValidStripTECHits",trkhp_valtechits_,"numberOfValidStripTECHits[n]/I");
-      tree_->Branch("numberOfValidStripTIBHits",trkhp_valtibhits_,"numberOfValidStripTIBHits[n]/I");
-      tree_->Branch("numberOfValidStripTIDHits",trkhp_valtidhits_,"numberOfValidStripTIDHits[n]/I");
-      tree_->Branch("numberOfValidStripTOBHits",trkhp_valtobhits_,"numberOfValidStripTOBHits[n]/I");
-      
-      tree_->Branch("muonStationsWithValidHits" ,        trkhp_stationsvalhits_     ,"muonStationsWithValidHits[n]/I");
-      tree_->Branch("muonStationsWithBadHits" ,          trkhp_stationsbadhits_     ,"muonStationsWithBadHits[n]/I");
-      tree_->Branch("innermostMuonStationWithValidHits" ,trkhp_innerstationsvalhits_,"innermostMuonStationWithValidHits[n]/I");
-      tree_->Branch("outermostMuonStationWithValidHits" ,trkhp_outerstationsvalhits_,"outermostMuonStationWithValidHits[n]/I");
-
       
 
    }
