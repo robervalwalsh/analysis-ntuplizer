@@ -451,6 +451,11 @@ void Candidates<T>::Kinematics()
 //             std::cout << "    Tag Name = " << tagNames[it] << std::endl;
 //          }
          
+         if ( jet->hasUserFloat("bJetRegCorr") ) bjetRegCorr_[n] = jet->userFloat("bJetRegCorr");
+         else                                    bjetRegCorr_[n] = 1;
+         
+         if ( jet->hasUserFloat("bJetRegRes") )  bjetRegRes_[n] = jet->userFloat("bJetRegRes");
+         else                                    bjetRegRes_[n] = 1;
          
          for ( size_t it = 0 ; it < btag_vars_.size() ; ++it )
          {
@@ -933,6 +938,8 @@ void Candidates<T>::Branches()
           tree_->Branch("puJetIdFullDiscriminant", puJetIdFullDiscr_, "puJetIdFullDiscriminant[n]/F");
           tree_->Branch("puJetIdFullId", puJetIdFullId_, "puJetIdFullId[n]/I");
           
+          tree_->Branch("bjetRegCorr",bjetRegCorr_,"bjetRegCorr_[n]/F");
+          tree_->Branch("bjetRegRes",bjetRegRes_,"bjetRegRes_[n]/F");
          
       }
       if ( is_pfjet_ || is_patjet_ )
