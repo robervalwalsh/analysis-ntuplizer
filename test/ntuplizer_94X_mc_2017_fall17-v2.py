@@ -1,7 +1,9 @@
 # For the ntuple production
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process('MssmHbb')
+from Configuration.StandardSequences.Eras import eras
+
+process = cms.Process('MssmHbb',eras.Run2_2017,eras.run2_nanoAOD_94XMiniAODv2)
 
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100000)
