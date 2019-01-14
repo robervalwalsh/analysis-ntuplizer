@@ -286,6 +286,22 @@ MssmHbbNtuplizerTriggerObjects = cms.PSet(
                                              'hltDiPFJetAve400',
                                              
    )
+                            + cms.vstring  ( 
+                                             'hltL1sQuadJetC50to60IorHTT280to500IorHTT250to340QuadJet',
+                                             'hltQuadCentralJet30',
+                                             'hltCaloQuadJet30HT300',
+                                             'hltBTagCaloCSVp05Double',
+                                             'hltPFCentralJetLooseIDQuad30',
+                                             'hlt1PFCentralJetLooseID75',
+                                             'hlt2PFCentralJetLooseID60',
+                                             'hlt3PFCentralJetLooseID45',
+                                             'hlt4PFCentralJetLooseID40',
+                                             'hltPFCentralJetsLooseIDQuad30HT300',
+                                             'hltPFJetForBtagSelector',
+                                             'hltBTagPFCSVp070Triple',
+                                                                                          
+   )
+   
    ),
    TriggerObjectSplits         = cms.vstring  (
                                              'hltL1Mu12er2p3Jet40er2p3dRMax0p4DoubleJet40er2p3dEtaMax1p6',

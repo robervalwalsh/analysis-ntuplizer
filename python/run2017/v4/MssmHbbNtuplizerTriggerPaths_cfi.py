@@ -75,6 +75,8 @@ MssmHbbNtuplizerTriggerPaths = cms.PSet(
                                      'HLT_AK8PFJet450_v',
                                      'HLT_AK8PFJet500_v',
                                      'HLT_AK8PFJet550_v',
+                                     'HLT_PFHT300PT30_QuadPFJet_75_60_45_40_TriplePFBTagCSV_3p0_v',
+                                     'HLT_PFHT300PT30_QuadPFJet_75_60_45_40_v',
 
 
                                      
