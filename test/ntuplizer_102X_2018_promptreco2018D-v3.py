@@ -1,6 +1,6 @@
 #________________________________________________________________________________________________________________________________________________
 #
-# -> Full info on installation /afs/desy.de/user/w/walsh/cms/ntuplizer/2018/cmssw/v3
+# -> Full info on installation: https://github.com/robervalwalsh/analysis-ntuplizer/blob/develop-2018-v3/README.md 
 # 
 # Short info:
 #
