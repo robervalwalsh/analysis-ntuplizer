@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 import FWCore.ParameterSet.Config as cms
 
-ntuplizerBTag = cms.PSet(
+btagAlgorithms = cms.PSet(
     BTagAlgorithms = cms.vstring   (
                 'pfDeepCSVJetTags:probudsg',
                 'pfDeepCSVJetTags:probc',
