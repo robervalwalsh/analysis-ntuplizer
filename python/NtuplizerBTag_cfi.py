@@ -1,6 +1,5 @@
 import FWCore.ParameterSet.Config as cms
-from Configuration.Eras.Modifier_run2_jme_2016_cff import run2_jme_2016
-from Configuration.Eras.Modifier_run2_jme_2017_cff import run2_jme_2017
+import FWCore.ParameterSet.Config as cms
 
 ntuplizerBTag = cms.PSet(
     BTagAlgorithms = cms.vstring   (
@@ -17,32 +16,18 @@ ntuplizerBTag = cms.PSet(
                 'pfDeepFlavourJetTags:problepb',
     ),
     BTagAlgorithmsAlias = cms.vstring   (
-                'btag_deeplight',
-                'btag_deepc',
-                'btag_deepcc',
-                'btag_deepb',
-                'btag_deepbb',
-                'btag_dflight',
-                'btag_dfg',
-                'btag_dfc',
-                'btag_dfb',
-                'btag_dfbb',
-                'btag_dflepb',
+                'btag_deepcsv_light',
+                'btag_deepcsv_c',
+                'btag_deepcsv_cc',
+                'btag_deepcsv_b',
+                'btag_deepcsv_bb',
+                'btag_deepjet_flight',
+                'btag_deepjet_g',
+                'btag_deepjet_c',
+                'btag_deepjet_b',
+                'btag_deepjet_bb',
+                'btag_deepjet_lepb',
     ),
 )
 
-run2_jme_2017.toModify(ntuplizerBTag,
-                BTagAlgorithms = ntuplizerBTag.BTagAlgorithms + cms.vstring   (
-                'pfCombinedInclusiveSecondaryVertexV2BJetTags',
-                'pfJetProbabilityBJetTags',
-    )
-)
 
-    
-run2_jme_2017.toModify(ntuplizerBTag,
-                BTagAlgorithmsAlias = ntuplizerBTag.BTagAlgorithmsAlias + cms.vstring   (
-                'btag_csvivf',
-                'btag_jetprob',
-    )
-)
-    
