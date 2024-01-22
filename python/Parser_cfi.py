@@ -49,7 +49,7 @@ def parser(yml_file=None):
                   "Trigger info")
 
    options.register('outputFile',
-                  "mssmhbb_ntuple.root",
+                  "ntuple.root",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "name for the output root file (\"ntuple.root\" is default)")
