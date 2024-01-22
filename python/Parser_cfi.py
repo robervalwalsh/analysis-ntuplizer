@@ -61,7 +61,7 @@ def parser(yml_file=None):
                   "files to process")
 
    options.register('json',
-                  '/eos/user/c/cmsdqm/www/CAF/certification/Collisions23/Cert_Collisions2023_366442_370790_Golden.json',
+                  '',
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "JSON file (do not use with CRAB!)")
