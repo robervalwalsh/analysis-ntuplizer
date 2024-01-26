@@ -27,18 +27,17 @@ command_line_options = ntuplizer_parser()
 process = cms.Process('MssmHbb',eras.Run3_2023)
 
 process.options = cms.untracked.PSet()
+# execution with 4cores
+process.options.numberOfThreads=cms.untracked.uint32(4)
 
 # general configurations
 process.load('FWCore.MessageService.MessageLogger_cfi')
-process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100000)
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(command_line_options.logReportEvery)
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration.Geometry.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.GlobalTag = GlobalTag(process.GlobalTag, command_line_options.globalTag)
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(command_line_options.maxEvents) )
-
-# execution with 4cores
-process.options.numberOfThreads=cms.untracked.uint32(4)
 
 ## TFileService
 process.TFileService = cms.Service('TFileService',
@@ -132,7 +131,6 @@ process.p = cms.Path(
                      process.MssmHbb,
                      process.AK4Jets
                     )
-
 
 
 ## Inputs

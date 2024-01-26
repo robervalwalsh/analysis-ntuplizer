@@ -72,6 +72,12 @@ def ntuplizer_parser(yml_file=None):
                     VarParsing.VarParsing.varType.int,
                     "ntuple production version")
 
+   command_line_parser.register('logReportEvery',
+                  10000,
+                  VarParsing.VarParsing.multiplicity.singleton,
+                  VarParsing.VarParsing.varType.int,
+                  "report every n events")
+
    command_line_parser.parseArguments()
 
    trigger_info = ''
@@ -96,6 +102,7 @@ def ntuplizer_parser(yml_file=None):
       print("xsection          : ", command_line_parser.xsection)
    if command_line_parser.json:
       print("json              : ", command_line_parser.json)
+   print("logReportEvery    : ", command_line_parser.logReportEvery)
    print('----------------------------')
    print
 
