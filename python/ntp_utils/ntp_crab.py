@@ -25,7 +25,7 @@ from CRABAPI.RawCommand import crabCommand
 from CRABClient.ClientExceptions import ClientException
 from http.client import HTTPException
     
-from Analysis.Ntuplizer.CrabConfig import crab_config
+from Analysis.Ntuplizer.utils.crab_config import crab_config
 import subprocess
 
 from Analysis.Ntuplizer.ntp_utils.ntp_common import ntp_common
