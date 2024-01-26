@@ -11,7 +11,8 @@ from Analysis.Ntuplizer.utils.datainfo import DataInfo
 def main():
 
    # input options
-   opts, unknown = crab_parser()
+   my_name = os.path.basename(__file__)
+   opts, unknown = crab_parser(my_name)
    
    if opts.which == 'info':
       data_info = DataInfo(opts)
