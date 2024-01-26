@@ -2,7 +2,7 @@
 from argparse import ArgumentParser
 from argparse import HelpFormatter
 
-from Analysis.Ntuplizer.ntp_utils.colors import tcolors
+from Analysis.Ntuplizer.utils.colors import tcolors
 
 W  = tcolors.W
 R  = tcolors.R

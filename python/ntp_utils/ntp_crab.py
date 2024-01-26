@@ -2,7 +2,7 @@ import os
 import sys
 import yaml
 #from colors import tcolors
-from Analysis.Ntuplizer.ntp_utils.colors import tcolors
+from Analysis.Ntuplizer.utils.colors import tcolors
 W  = tcolors.W
 R  = tcolors.R
 G  = tcolors.G
