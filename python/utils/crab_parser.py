@@ -15,10 +15,10 @@ BOLD = tcolors.BOLD
 UNDERLINE = tcolors.UNDERLINE
 
 
-def crab_parser():
+def crab_parser(script_name):
    idesc = G+'*** '+UNDERLINE
    fdesc = W+G+' ***'+W
-   options = ArgumentParser(prog='submit_crab.py', \
+   options = ArgumentParser(prog=script_name, \
       formatter_class=lambda prog: HelpFormatter(prog,indent_increment=6,max_help_position=80,width=280), \
       description=idesc+'Ntuple Production Script (CRAB)'+fdesc, \
       epilog=Y+'NB: requires the installation of https://github.com/desy-cms/analysis-ntuples in Analysis/Ntuplizer/data/ntuples'+W,\
