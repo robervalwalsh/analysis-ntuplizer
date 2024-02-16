@@ -12,7 +12,8 @@ import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-from Analysis.Ntuplizer.BTagAlgorithms_cfi import BTagAlgorithms_AK4CHS
+# from Analysis.Ntuplizer.BTagAlgorithms_cfi import BTagAlgorithms
+from Analysis.Ntuplizer.ParticleNet_cfi import PNetAlgorithms
 
 from Analysis.Ntuplizer.utils.trigger_info import trigger_info_reader
 from Analysis.Ntuplizer.utils.ntuplizer_parser import ntuplizer_parser
@@ -71,10 +72,12 @@ process.triggerSelection = cms.EDFilter( 'TriggerResultsFilter',
 process.TotalEvents    = cms.EDProducer('EventCountProducer')
 process.FilteredEvents = cms.EDProducer('EventCountProducer')
 
+
+
 ## Ntuplizer
 process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
     # Imported settings (always at the beginning???)
-    BTagAlgorithms_AK4CHS,
+    PNetAlgorithms,
     trigger_info['ntuplizerTriggerPaths'],
     trigger_info['ntuplizerL1Seeds'],
     trigger_info['ntuplizerTriggerObjects'],
@@ -84,9 +87,10 @@ process.MssmHbb     = cms.EDAnalyzer('Ntuplizer',
     TriggerObjectStandAlone = cms.VInputTag(cms.InputTag('slimmedPatTrigger'), ),
    #  TotalEvents     = cms.InputTag ('TotalEvents'),
    #  FilteredEvents  = cms.InputTag ('FilteredEvents'),
-    PatJets         = cms.VInputTag( cms.InputTag('updatedPatJets'), ),
-    JECRecords      = cms.vstring  (              'AK4PFchs', ), # for the JEC uncertainties
-    JERRecords      = cms.vstring  (              'AK4PFchs', ), # for the JER uncertainties
+    PatJets         = cms.VInputTag( cms.InputTag('updatedPatJetsAK4PFchs'),cms.InputTag('updatedPatJetsAK4PFPuppi')  ),
+   #  PatJets         = cms.VInputTag( cms.InputTag('slimmedJetsPuppi')  ),
+    JECRecords      = cms.vstring  (              'AK4PFchs', 'AK4PFPuppi' ), # for the JEC uncertainties: existing records are: AK4PFchs, AK4PFPuppi, AK8PFchs, AK8PFPuppi
+    JERRecords      = cms.vstring  (              'AK4PFchs', 'AK4PFPuppi' ), # for the JER uncertainties
     PatMuons        = cms.VInputTag(cms.InputTag('slimmedMuons') ),
     PrimaryVertices = cms.VInputTag(cms.InputTag('offlineSlimmedPrimaryVertices') ),
 #    L1TJets         = cms.VInputTag(cms.InputTag('caloStage2Digis','Jet','RECO'), ),
@@ -109,6 +113,8 @@ else:
 
 #########
 
+process.load("RecoBTag.ONNXRuntime.pfParticleNetFromMiniAODAK4_cff")
+
 ## Do the stuff!
 # process.p = cms.Path(process.TotalEvents +
 #                      process.triggerSelection +
@@ -124,12 +130,15 @@ else:
 #                      process.AK4Jets,
 #                     )
 
+
 process.p = cms.Path(
                      # process.TotalEvents +
                      process.triggerSelection +
                      # process.FilteredEvents +
                      process.MssmHbb,
-                     process.AK4Jets
+                     # process.BJetRegression,
+                     process.AK4PFchs,
+                     process.AK4PFPuppi,
                     )
 
 
