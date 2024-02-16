@@ -57,7 +57,6 @@ class CrabJob:
       self.__datasets = common.datasets()
       self.__pyconfig = common.python_config()
       self.__process = common.dataset_alias()
-      self.__datasets = common.datasets()
       self.__username = common.username()
       self.__mypath = '/store/user/'+self.__username
       self.__baseoutdir = self.__mypath+common.base_outdir()
