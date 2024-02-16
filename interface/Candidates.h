@@ -131,7 +131,7 @@ namespace analysis {
             float normChi2_[maxCandidates];
 
             // pat jet additional vars
-            float btag_[15][maxCandidates];
+            float btag_[50][maxCandidates];
             int   flavour_[maxCandidates];
             int   hadronFlavour_[maxCandidates];
             int   partonFlavour_[maxCandidates];
@@ -168,6 +168,9 @@ namespace analysis {
             // bJet regression
             float bjetRegCorr_[maxCandidates];
             float bjetRegRes_[maxCandidates];
+
+            // rawFactor
+            float raw_factor_[maxCandidates];
                         
             int indx_[maxCandidates];
             int pdg_[maxCandidates];

@@ -457,20 +457,8 @@ void Candidates<T>::Kinematics()
       if ( is_patjet_ )
       {
          pat::Jet * jet = dynamic_cast<pat::Jet*> (&candidates_[i]);
-         
-//         std::string sv = "pfSecondaryVertexTagInfos";
-//         std::cout << "oioi   " << sv << std::endl;
-//         const reco::SecondaryVertexTagInfo * svTI = jet->tagInfoSecondaryVertex("secondaryVertex");
-//         std::cout << "oioi   " << svTI << std::endl;
 
-//          //          
-//          std::vector<std::string> tagNames = jet -> userIntNames();
-//          std::cout << "Jet has " << tagNames.size() << " tags" << std::endl;
-//          for ( size_t it = 0 ; it < tagNames.size() ; ++it ) 
-//          {
-//             std::cout << "    Tag Name = " << tagNames[it] << std::endl;
-//          }
-         
+         // TODO: REMOVE OLD REGRESSION OUTPUT         
          if ( jet->hasUserFloat("bJetRegCorr") ) bjetRegCorr_[n] = jet->userFloat("bJetRegCorr");
          else                                    bjetRegCorr_[n] = 1;
          
@@ -594,6 +582,9 @@ void Candidates<T>::Kinematics()
          {
             puJetIdFullId_[n] = jet -> userInt(puidkey);
          }
+
+         // rawFactor: "1 - Factor to get back to raw pT
+         raw_factor_[n] = 1.-jet->jecFactor("Uncorrected");
          
          
       } // end PAT::Jet
@@ -981,6 +972,9 @@ void Candidates<T>::Branches()
           
           tree_->Branch("bjetRegCorr",bjetRegCorr_,"bjetRegCorr_[n]/F");
           tree_->Branch("bjetRegRes",bjetRegRes_,"bjetRegRes_[n]/F");
+
+          // rawFactor
+          tree_->Branch("rawFactor",raw_factor_,"rawFactor[n]/F");
          
       }
       if ( is_pfjet_ || is_patjet_ )
@@ -1075,8 +1069,9 @@ template <typename T>
 void Candidates<T>::Init( const std::vector<TitleAlias> & btagVars )
 {
    btag_vars_ = btagVars;
-   if ( btag_vars_.size() > 15 )
-      btag_vars_.erase(btag_vars_.begin()+15,btag_vars_.end());
+   size_t max_btags = 50;
+   if ( btag_vars_.size() > max_btags )
+      btag_vars_.erase(btag_vars_.begin()+max_btags,btag_vars_.end());
    Init();
    
 }
