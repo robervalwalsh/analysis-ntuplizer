@@ -710,20 +710,20 @@ Ntuplizer::beginJob()
    eventFilterResults_ = {};
    
    // Btagging algorithms
-   // Will set one default
    btagAlgos_.clear();
    btagAlgosAlias_.clear();
-   btagAlgos_.push_back("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-   btagAlgosAlias_.push_back("btag_csvivf");
-   if ( config_.exists("BTagAlgorithmsAlias") )
+   // Will set one default
+   btagAlgos_.push_back("pfParticleNetFromMiniAODAK4PuppiCentralDiscriminatorsJetTags:BvsAll");
+   btagAlgosAlias_.push_back("btag_pnet_b_ak4puppi");
+   if ( config_.exists("PNetAlgorithmsAlias") )
    {
       btagAlgosAlias_.clear();
-      btagAlgosAlias_ = config_.getParameter< std::vector<std::string> >("BTagAlgorithmsAlias");
+      btagAlgosAlias_ = config_.getParameter< std::vector<std::string> >("PNetAlgorithmsAliases");
    }
-   if ( config_.exists("BTagAlgorithms") )
+   if ( config_.exists("PNetAlgorithms") )
    {
       btagAlgos_.clear();
-      btagAlgos_ = config_.getParameter< std::vector<std::string> >("BTagAlgorithms");
+      btagAlgos_ = config_.getParameter< std::vector<std::string> >("PNetAlgorithms");
    }
    if ( btagAlgos_.size() != btagAlgosAlias_.size() )
    {
@@ -750,25 +750,6 @@ Ntuplizer::beginJob()
          jec_files = config_.getParameter< std::vector<std::string > >("JECUncertaintyFiles");
       }
    }
-//    // JER Record (from TXT files)
-//    std::vector<std::string > jer_files;
-//    std::vector<std::string > jersf_files;
-//    // JER Record (from CondDB)
-//    jerRecords_.clear();
-//    if ( do_patjets_ && config_.exists("JERRecords") )
-//    {
-//       jerRecords_ = config_.getParameter< std::vector<std::string> >("JERRecords");
-//       if(config_.exists("JERResFiles"))
-//       {
-//       	jer_files = config_.getParameter< std::vector<std::string > >("JERResFiles");
-//       }
-//       if(config_.exists("JERSfFiles"))
-//       {
-//       	jersf_files = config_.getParameter< std::vector<std::string > >("JERSfFiles");
-//       }
-//       
-//    }
-   //
    
    size_t nPatJets = 0;
    if ( do_patjets_ )
