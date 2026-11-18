@@ -314,6 +314,13 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config):config_(config) { //:   //
    eventCounters_.resize(2);
    mHatEventCounters_.resize(2);
 
+   // Definitions of the variables to be stored in the metadata tree
+   do_metfilters_ = config_.existsAs<InputTag>("MetFiltersResults");
+   do_triggeraccepts_   = config_.exists("TriggerResults");
+   do_event_count_summary_  = config_.exists("TotalEvents")  && config_.exists("FilteredEvents");
+   do_triggerobjects_   = config_.exists("TriggerObjectStandAlone")  &&  config_.exists("TriggerObjectLabels");   
+
+
    // Metadata 
    metadata_ = std::make_unique<Metadata>(file_service, is_mc_);
    metadata_ -> Init();
@@ -345,12 +352,6 @@ Ntuplizer::Ntuplizer(const edm::ParameterSet& config):config_(config) { //:   //
       splitTriggerObject = false;
    }
    
-
-   // Definitions of the variables to be stored in the metadata tree
-   do_metfilters_ = config_.existsAs<InputTag>("MetFiltersResults");
-   do_triggeraccepts_   = config_.exists("TriggerResults");
-   do_event_count_summary_  = config_.exists("TotalEvents")  && config_.exists("FilteredEvents");
-   do_triggerobjects_   = config_.exists("TriggerObjectStandAlone")  &&  config_.exists("TriggerObjectLabels");   
 
    inputTagsVec_ = config_.getParameterNamesForType<InputTags>();
    inputTags_    = config_.getParameterNamesForType<InputTag>();
